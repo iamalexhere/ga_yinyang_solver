@@ -14,6 +14,8 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 
 		private final Map<C, T> cache = new WeakHashMap<C, T>();
 
+		//method compare fitness 2 kromosom
+		//Override dari interface Chromosome.java
 		@Override
 		public int compare(C chr1, C chr2) {
 			T fit1 = this.fit(chr1);
@@ -22,6 +24,8 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 			return ret;
 		}
 
+		//method ngitung suatu kromosom
+		//tipe data T itu buat fitness score
 		public T fit(C chr) {
 			T fit = this.cache.get(chr);
 			if (fit == null) {
@@ -53,14 +57,17 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 
 	private int iteration = 0;
 
+	//Constructor
 	public GeneticAlgorithm(Population<C> population, FitnessFunction<C, T> fitnessFunc) {
 		this.population = population;
 		this.fitnessFunc = fitnessFunc;
 		this.chromosomesComparator = new ChromosomesComparator();
-		this.population.sortPopulationByFitness(this.chromosomesComparator);
+		this.population.sortPopulationByFitness(this.chromosomesComparator); //langsung di itung semua fitness terus langsung di sort
 	}
 
+	//method buat "Iterasi" dari gen 1 ke gen selanjutnya (ex: gen-1 ke gen-2)
 	public void evolve() {
+		//jumlah parentnya disamain sama populasi
 		int parentPopulationSize = this.population.getSize();
 
 		Population<C> newPopulation = new Population<C>();
@@ -69,12 +76,17 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 			newPopulation.addChromosome(this.population.getChromosomeByIndex(i));
 		}
 
+		//semua di crossover secara random
+		//semua di mutasi
+		//semua yang dicrossover dan dimutasi disimpen ke next generation
+		//karna jadinya pasti banyak, di trim sesuai jumlah populasi
 		for (int i = 0; i < parentPopulationSize; i++) {
-			C chromosome = this.population.getChromosomeByIndex(i);
+			C chromosome = this.population.getChromosomeByIndex(i);	
 			C mutated = chromosome.mutate();
 
 			C otherChromosome = this.population.getRandomChromosome();
 			List<C> crossovered = chromosome.crossover(otherChromosome);
+
 
 			newPopulation.addChromosome(mutated);
 			for (C c : crossovered) {
@@ -87,6 +99,8 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 		this.population = newPopulation;
 	}
 
+	//manggil method yg diatas sesuai count
+	//setiap iterasi, listenenrnya nge update
 	public void evolve(int count) {
 		this.terminate = false;
 

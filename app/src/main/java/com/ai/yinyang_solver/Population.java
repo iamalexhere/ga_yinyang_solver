@@ -25,7 +25,7 @@ public class Population<C extends Chromosome<C>> implements Iterable<C> {
 		return this.chromosomes.size();
 	}
 
-    //for mutation (?)
+    //for mutation
 	public C getRandomChromosome() {
 		int numOfChromosomes = this.chromosomes.size();
 		// TODO improve random generator
@@ -33,6 +33,7 @@ public class Population<C extends Chromosome<C>> implements Iterable<C> {
 		int indx = this.random.nextInt(numOfChromosomes);
 		return this.chromosomes.get(indx);
 	}
+
 
 	public C getChromosomeByIndex(int indx) {
 		return this.chromosomes.get(indx);
@@ -47,7 +48,7 @@ public class Population<C extends Chromosome<C>> implements Iterable<C> {
 	/**
 	 * shortening population till specific number
 	 */
-    //motong 
+    //motong sampe sebesar populasi
 	public void trim(int len) {
 		this.chromosomes = this.chromosomes.subList(0, len);
 	}
