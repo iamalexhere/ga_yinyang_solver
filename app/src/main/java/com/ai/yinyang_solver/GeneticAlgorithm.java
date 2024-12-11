@@ -10,33 +10,29 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 
 	private static final int ALL_PARENTAL_CHROMOSOMES = Integer.MAX_VALUE;
 
-	private class ChromosomesComparator implements Comparator<C> {
-
-		private final Map<C, T> cache = new WeakHashMap<C, T>();
-
-		//method compare fitness 2 kromosom
-		//Override dari interface Chromosome.java
+	private class ChromosomesComparator implements Comparator<C> {	//class buat ngebandingin fitness antar kromosom
+		private final Map<C, T> cache = new WeakHashMap<C, T>();	//populasi
+		
 		@Override
 		public int compare(C chr1, C chr2) {
+			//ambil fitness kedua kromosom, terus bandingin
 			T fit1 = this.fit(chr1);
 			T fit2 = this.fit(chr2);
 			int ret = fit1.compareTo(fit2);
 			return ret;
 		}
 
-		//method ngitung suatu kromosom
-		//tipe data T itu buat fitness score
 		public T fit(C chr) {
-			T fit = this.cache.get(chr);
+			T fit = this.cache.get(chr);	//ambil kromosom dari hashmap
 			if (fit == null) {
-				fit = GeneticAlgorithm.this.fitnessFunc.calculate(chr);
-				this.cache.put(chr, fit);
+				fit = GeneticAlgorithm.this.fitnessFunc.calculate(chr);	//hitung fitnessnya
+				this.cache.put(chr, fit);	//taro di hashmap
 			}
 			return fit;
 		};
 
 		public void clearCache() {
-			this.cache.clear();
+			this.cache.clear();	//kosongin hash map
 		}
 	}
 
@@ -57,36 +53,28 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 
 	private int iteration = 0;
 
-	//Constructor
-	public GeneticAlgorithm(Population<C> population, FitnessFunction<C, T> fitnessFunc) {
+	public GeneticAlgorithm(Population<C> population, FitnessFunction<C, T> fitnessFunc) {	//constructor
 		this.population = population;
 		this.fitnessFunc = fitnessFunc;
 		this.chromosomesComparator = new ChromosomesComparator();
-		this.population.sortPopulationByFitness(this.chromosomesComparator); //langsung di itung semua fitness terus langsung di sort
+		this.population.sortPopulationByFitness(this.chromosomesComparator);
 	}
 
-	//method buat "Iterasi" dari gen 1 ke gen selanjutnya (ex: gen-1 ke gen-2)
 	public void evolve() {
-		//jumlah parentnya disamain sama populasi
 		int parentPopulationSize = this.population.getSize();
 
 		Population<C> newPopulation = new Population<C>();
 
 		for (int i = 0; (i < parentPopulationSize) && (i < this.parentChromosomesSurviveCount); i++) {
-			newPopulation.addChromosome(this.population.getChromosomeByIndex(i));
+			newPopulation.addChromosome(this.population.getChromosomeByIndex(i)); //nambah kromosom ke populasi baru dari populasi lama
 		}
 
-		//semua di crossover secara random
-		//semua di mutasi
-		//semua yang dicrossover dan dimutasi disimpen ke next generation
-		//karna jadinya pasti banyak, di trim sesuai jumlah populasi
-		for (int i = 0; i < parentPopulationSize; i++) {
-			C chromosome = this.population.getChromosomeByIndex(i);	
-			C mutated = chromosome.mutate();
+		for (int i = 0; i < parentPopulationSize; i++) {	//looping seluruh populasi, crossover semuanya, mutasi semuanya
+			C chromosome = this.population.getChromosomeByIndex(i);
+			C mutated = chromosome.mutate();	//ini gak pake probabilitas mutasinya, tapi nanti kita pake
 
 			C otherChromosome = this.population.getRandomChromosome();
 			List<C> crossovered = chromosome.crossover(otherChromosome);
-
 
 			newPopulation.addChromosome(mutated);
 			for (C c : crossovered) {
@@ -99,9 +87,7 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 		this.population = newPopulation;
 	}
 
-	//manggil method yg diatas sesuai count
-	//setiap iterasi, listenenrnya nge update
-	public void evolve(int count) {
+	public void evolve(int count) {	//loop semua iterasi, lakukan algoritma genetik
 		this.terminate = false;
 
 		for (int i = 0; i < count; i++) {
