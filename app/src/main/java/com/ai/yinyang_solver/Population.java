@@ -55,4 +55,12 @@ public class Population<C extends Chromosome<C>> implements Iterable<C> {
 		return this.chromosomes.iterator();
 	}
 
+    // Add protected methods for subclasses
+    protected void setChromosomes(List<C> newChromosomes) {
+        this.chromosomes = new ArrayList<>(newChromosomes);
+    }
+
+    protected List<C> getChromosomes() {
+        return new ArrayList<>(this.chromosomes);
+    }
 }
