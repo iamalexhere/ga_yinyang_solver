@@ -10,8 +10,10 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
     @Override
     public Double calculate(YinYangChromosome chromosome) {
         YinYangBoard board = chromosome.getBoard();
-        
-        double connectivity = Math.abs(board.isRegionConnected(YinYangBoard.BLACK) - board.isRegionConnected(YinYangBoard.WHITE));
+        int white = board.countConnectedComponents(YinYangBoard.WHITE)*(board.countConnectedComponents(YinYangBoard.WHITE)-1);
+        int black = board.countConnectedComponents(YinYangBoard.BLACK)*(board.countConnectedComponents(YinYangBoard.BLACK)-1);
+         
+        double connectivity = white + black;
         int crossPatternCount = board.slidingWindow();
 
         double fitness = connectivity*CONNECTIVITY_WEIGHT + crossPatternCount*CROSSING_PATTERN_WEIGHT;

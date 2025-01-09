@@ -52,14 +52,14 @@ public class YinYangBoard {
     
     // Cek apakah semua region terhubung
     public boolean isAllRegionsConnected() {
-        if(Math.abs(isRegionConnected(BLACK) - isRegionConnected(WHITE)) == 0) {
+        if(countConnectedComponents(BLACK) == 1 && countConnectedComponents(WHITE) == 1) {
             return true;
         }
         return false;
     }
     
     // Helper method untuk cek konektivitas satu warna
-    protected int isRegionConnected(char color) {
+    protected int countConnectedComponents(char color) {
         // Temporary array untuk marking
         boolean[][] visited = new boolean[size][size];
         int componentCount = 1;

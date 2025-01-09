@@ -6,7 +6,7 @@ public class YinYangSolver {
     private static final int POPULATION_SIZE = 100;
     private static final int MAX_GENERATIONS = 1000;
     private static final int MAX_STAGNANT_GENERATIONS = 50;
-    private static final double PERFECT_FITNESS = 99.9;
+    private static final double PERFECT_FITNESS = 0.99;
 
     private final YinYangBoard initialBoard;
     private final YinYangPopulation population;
