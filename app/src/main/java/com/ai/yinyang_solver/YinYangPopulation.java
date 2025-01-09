@@ -3,8 +3,14 @@ package com.ai.yinyang_solver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class YinYangPopulation extends Population<YinYangChromosome> {
+
+    // Method to clear all chromosomes in the population
+    public void clearChromosomes() {
+        getChromosomes().clear();
+    }
     private static final Random random = new Random();
     private static final int TOURNAMENT_SIZE = 5;  // Ukuran tournament untuk seleksi
     private final YinYangFitnessFunction fitnessFunction;
@@ -118,6 +124,75 @@ public class YinYangPopulation extends Population<YinYangChromosome> {
         // Ganti populasi lama dengan populasi baru
         setChromosomes(newPopulation);
     }
+
+    public void evolve(double mutationRate) {
+        List<YinYangChromosome> newPopulation = new ArrayList<>();
+        
+        // Perform tournament selection and crossover
+        while (newPopulation.size() < getChromosomes().size()) {
+            YinYangChromosome parent1 = tournamentSelection();
+            YinYangChromosome parent2 = tournamentSelection();
+            
+            List<YinYangChromosome> offspring = parent1.crossover(parent2);
+            
+            // Apply mutation based on rate
+            if (random.nextDouble() < mutationRate) {
+                offspring.get(0).mutate();
+            }
+            if (random.nextDouble() < mutationRate) {
+                offspring.get(1).mutate();
+            }
+            
+            newPopulation.addAll(offspring);
+        }
+        
+        // Replace old population
+        setChromosomes(newPopulation);
+    }
+
+    public List<YinYangChromosome> getTopChromosomes(int count) {
+        return getChromosomes().stream()
+            .sorted((c1, c2) -> Double.compare(
+                fitnessFunction.calculate(c1),
+                fitnessFunction.calculate(c2)))
+            .limit(count)
+            .map(YinYangChromosome::clone)
+            .collect(Collectors.toList());
+    }
+
+    public void replaceWorstWithElite(List<YinYangChromosome> elite) {
+        // Get current chromosomes and sort by fitness (worst to best)
+        List<YinYangChromosome> currentChromosomes = new ArrayList<>(getChromosomes());
+        currentChromosomes.sort((c1, c2) -> Double.compare(
+            fitnessFunction.calculate(c2),
+            fitnessFunction.calculate(c1)));
+        
+        // Replace worst individuals with elite
+        for (int i = 0; i < elite.size(); i++) {
+            if (i < currentChromosomes.size()) {
+                currentChromosomes.set(i, elite.get(i).clone());
+            }
+        }
+        
+        setChromosomes(currentChromosomes);
+    }
+
+    public void reinitializeWorstIndividuals(int count) {
+        // Get current chromosomes and sort by fitness (worst to best)
+        List<YinYangChromosome> currentChromosomes = new ArrayList<>(getChromosomes());
+        currentChromosomes.sort((c1, c2) -> Double.compare(
+            fitnessFunction.calculate(c2),
+            fitnessFunction.calculate(c1)));
+        
+        // Reinitialize worst individuals
+        for (int i = 0; i < count && i < currentChromosomes.size(); i++) {
+            YinYangChromosome newChromosome = new YinYangChromosome(currentChromosomes.get(i).getBoard().getSize());
+            newChromosome.initializeRandom();
+            currentChromosomes.set(i, newChromosome);
+        }
+        
+        setChromosomes(currentChromosomes);
+    }
     
     // Method untuk mendapatkan statistik populasi
     public String getPopulationStats() {
@@ -141,5 +216,35 @@ public class YinYangPopulation extends Population<YinYangChromosome> {
             Worst Fitness: %.2f
             Average Fitness: %.2f
             """.formatted(getSize(), bestFitness, worstFitness, avgFitness);
+    }
+
+    public void reinitializePopulation(YinYangBoard initialBoard, int populationSize) {
+        // Clear existing population
+        clearChromosomes();
+        
+        // Create new population
+        initializePopulation(initialBoard, populationSize);
+    }
+
+    public YinYangChromosome selectByTournament(int tournamentSize) {
+        YinYangChromosome best = null;
+        double bestFitness = Double.POSITIVE_INFINITY;
+        
+        for (int i = 0; i < tournamentSize; i++) {
+            YinYangChromosome candidate = getRandomChromosome();
+            double fitness = fitnessFunction.calculate(candidate);
+            
+            if (fitness < bestFitness) {
+                best = candidate;
+                bestFitness = fitness;
+            }
+        }
+        
+        return best;
+    }
+
+    public void crossover(YinYangChromosome parent1, YinYangChromosome parent2) {
+        List<YinYangChromosome> offspring = parent1.crossover(parent2);
+        replaceWorstWithElite(offspring);
     }
 }

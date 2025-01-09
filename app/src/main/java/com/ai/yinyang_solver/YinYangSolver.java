@@ -1,121 +1,132 @@
 package com.ai.yinyang_solver;
 
-public class YinYangSolver {
+import java.util.List;
+import java.util.Random;
 
-    // Konfigurasi GA
-    private static final int POPULATION_SIZE = 200; // Increased
-    private static final int MAX_GENERATIONS = 2000; // Increased
-    private static final int MAX_STAGNANT_GENERATIONS = 50;
-    private static final double PERFECT_FITNESS = 0.0; // Changed to 0.0 since we want minimum
-    private static final double MUTATION_RATE = 0.2; // Higher mutation rate
-    private static final int TOURNAMENT_SIZE = 7; // Larger tournament size
+public class YinYangSolver {
+    // Adjusted parameters
+    private static final int POPULATION_SIZE = 400; // Doubled
+    private static final int MAX_GENERATIONS = 2000; // Doubled
+    private static final int MAX_STAGNANT_GENERATIONS = 100; // Increased
+    private static final double PERFECT_FITNESS = 0.1; // Relaxed threshold
+    private static final double MUTATION_RATE = 0.3; // Increased
+    private static final int TOURNAMENT_SIZE = 5; // Increased
+    private static final int ELITE_COUNT = 8; // Doubled
+    private static final int LOCAL_SEARCH_ITERATIONS = 200; // Doubled
+    private static final double CROSSOVER_RATE = 0.8; // Added crossover
 
     private final YinYangBoard initialBoard;
     private final YinYangPopulation population;
     private final YinYangFitnessFunction fitnessFunction;
+    private final Random random;
 
     private int currentGeneration;
     private int stagnantGenerations;
     private double bestFitness;
+    private YinYangChromosome bestSolution;
 
-    // Add adaptive parameters
-    private double adaptiveMutationRate;
-    private int stagnantCount;
-
-    // Constructor
     public YinYangSolver(char[][] board) {
         this.initialBoard = new YinYangBoard(board);
         this.fitnessFunction = new YinYangFitnessFunction();
         this.population = new YinYangPopulation(fitnessFunction);
+        this.random = new Random();
         this.currentGeneration = 0;
         this.stagnantGenerations = 0;
-        this.bestFitness = Double.POSITIVE_INFINITY; // Changed to POSITIVE_INFINITY
-        this.adaptiveMutationRate = 0.1;
-        this.stagnantCount = 0;
+        this.bestFitness = Double.POSITIVE_INFINITY;
+        this.bestSolution = null;
     }
 
-    // Method utama untuk menjalankan solver
     public YinYangBoard solve() {
-        // Inisialisasi populasi
         population.initializePopulation(initialBoard, POPULATION_SIZE);
-        System.out.println("Initial population created.");
-        System.out.println(population.getPopulationStats());
-
-        // Main loop
+        int restartCount = 0;
+        
         while (!shouldTerminate()) {
-            // Evolusi populasi
-            population.evolve();
-            currentGeneration++;
-
-            // Update statistik
-            YinYangChromosome bestChromosome = population.getBestChromosome();
-            double currentFitness = fitnessFunction.calculate(bestChromosome);
-
-            // Update stagnant generations
-            if (currentFitness < bestFitness) { // Changed from > to <
-                bestFitness = currentFitness;
+            List<YinYangChromosome> elite = population.getTopChromosomes(ELITE_COUNT);
+            
+            // Enhanced evolution
+            population.evolve(MUTATION_RATE);
+            applyCrossover();
+            population.replaceWorstWithElite(elite);
+            
+            YinYangChromosome best = population.getBestChromosome();
+            localSearch(best);
+            
+            updateStats();
+            
+            // Restart if stuck
+            if (stagnantGenerations > MAX_STAGNANT_GENERATIONS / 2 && restartCount < 3) {
+                population.reinitializePopulation(initialBoard, POPULATION_SIZE);
                 stagnantGenerations = 0;
-
-                // Print progress
-                System.out.println("\nGeneration " + currentGeneration);
-                System.out.println("Best Fitness: " + bestFitness);
-                System.out.println("Current best solution:");
-                System.out.println(bestChromosome.toString());
-                System.out.println(fitnessFunction.getFitnessDescription(bestChromosome));
-            } else {
-                stagnantGenerations++;
+                restartCount++;
             }
-
-            // Adjust parameters
-            adjustParameters();
-
-            // Print progress setiap 10 generasi
-            if (currentGeneration % 10 == 0) {
-                System.out.println("\nGeneration " + currentGeneration);
-                System.out.println(population.getPopulationStats());
-            }
+            
+            currentGeneration++;
         }
 
-        // Return solusi terbaik
-        YinYangChromosome bestSolution = population.getBestChromosome();
-        System.out.println("\nFinal Solution:");
-        System.out.println("Generation: " + currentGeneration);
-        System.out.println("Fitness: " + bestFitness);
-        System.out.println(fitnessFunction.getFitnessDescription(bestSolution));
-        System.out.println(bestSolution.toString());
-
-        return bestSolution.getBoard();
+        return bestSolution != null ? bestSolution.getBoard() : population.getBestChromosome().getBoard();
     }
 
-    // Cek apakah algoritma harus berhenti
+    private void applyCrossover() {
+        for (int i = 0; i < POPULATION_SIZE / 2; i++) {
+            if (random.nextDouble() < CROSSOVER_RATE) {
+                YinYangChromosome parent1 = population.selectByTournament(TOURNAMENT_SIZE);
+                YinYangChromosome parent2 = population.selectByTournament(TOURNAMENT_SIZE);
+                population.crossover(parent1, parent2);
+            }
+        }
+    }
+
+    private void localSearch(YinYangChromosome chromosome) {
+        YinYangBoard board = chromosome.getBoard();
+        double currentFitness = fitnessFunction.calculate(chromosome);
+        boolean improved;
+        
+        for (int i = 0; i < LOCAL_SEARCH_ITERATIONS; i++) {
+            improved = false;
+            
+            // Try all possible moves systematically
+            for (int row = 0; row < board.getSize(); row++) {
+                for (int col = 0; col < board.getSize(); col++) {
+                    if (initialBoard.getCell(row, col) == '0') {
+                        char originalValue = board.getCell(row, col);
+                        board.setCell(row, col, originalValue == 'B' ? 'W' : 'B');
+                        
+                        double newFitness = fitnessFunction.calculate(chromosome);
+                        if (newFitness < currentFitness) {
+                            currentFitness = newFitness;
+                            improved = true;
+                        } else {
+                            board.setCell(row, col, originalValue);
+                        }
+                    }
+                }
+            }
+            
+            if (!improved) break; // Stop if no improvement found
+        }
+    }
+
     private boolean shouldTerminate() {
-        // 1. Solusi optimal ditemukan
-        if (bestFitness <= PERFECT_FITNESS) { // Changed from >= to <=
-            System.out.println("Perfect solution found!");
-            return true;
-        }
-
-        // 2. Mencapai maksimum generasi
-        if (currentGeneration >= MAX_GENERATIONS) {
-            System.out.println("Maximum generations reached.");
-            return true;
-        }
-
-        // 3. Fitness stagnant
-        if (stagnantGenerations >= MAX_STAGNANT_GENERATIONS) {
-            System.out.println("Fitness stagnant for " + MAX_STAGNANT_GENERATIONS + " generations.");
-            return true;
-        }
-
-        return false;
+        return bestFitness <= PERFECT_FITNESS ||
+               currentGeneration >= MAX_GENERATIONS ||
+               stagnantGenerations >= MAX_STAGNANT_GENERATIONS;
     }
 
-    private void adjustParameters() {
-        // Increase mutation rate if stuck
-        if (stagnantGenerations > 20) {
-            adaptiveMutationRate = Math.min(0.4, adaptiveMutationRate + 0.05);
+    private void updateStats() {
+        YinYangChromosome currentBest = population.getBestChromosome();
+        double currentFitness = fitnessFunction.calculate(currentBest);
+
+        if (currentFitness < bestFitness) {
+            bestFitness = currentFitness;
+            bestSolution = currentBest.clone();
+            stagnantGenerations = 0;
         } else {
-            adaptiveMutationRate = 0.1;
+            stagnantGenerations++;
+        }
+
+        // Periodically reinitialize worst individuals if stuck
+        if (stagnantGenerations > 20) {
+            population.reinitializeWorstIndividuals(POPULATION_SIZE / 10);
         }
     }
 
