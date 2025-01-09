@@ -262,14 +262,6 @@ public class YinYangBoardTest {
             {'B', 'W', 'W', 'W'}
         };
         YinYangBoard board1 = new YinYangBoard(connectedBoard);
-        
-        // Debug info
-        System.out.println("\nTesting Larger Board Connectivity:");
-        System.out.println("Connected board configuration:");
-        System.out.println(board1.toString());
-        System.out.println("Black regions count: " + countRegions(board1, 'B'));
-        System.out.println("White regions count: " + countRegions(board1, 'W'));
-        
         assertTrue("Connected regions should be valid", board1.isAllRegionsConnected());
 
         // Test case with disconnected regions
@@ -282,11 +274,11 @@ public class YinYangBoardTest {
         YinYangBoard board2 = new YinYangBoard(disconnectedBoard);
         assertFalse("Disconnected regions should be invalid", board2.isAllRegionsConnected());
 
-        // Test case with snake-like pattern
+        // Test case with snake-like pattern (corrected pattern to ensure connectivity)
         char[][] snakeBoard = {
             {'B', 'B', 'B', 'B'},
             {'W', 'W', 'W', 'B'},
-            {'B', 'B', 'W', 'B'},
+            {'W', 'B', 'B', 'B'},
             {'W', 'W', 'W', 'W'}
         };
         YinYangBoard board3 = new YinYangBoard(snakeBoard);

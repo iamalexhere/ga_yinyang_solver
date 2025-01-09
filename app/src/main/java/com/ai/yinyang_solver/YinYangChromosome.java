@@ -81,43 +81,37 @@ public class YinYangChromosome implements Chromosome<YinYangChromosome> {
     // Implementasi mutasi
     @Override
     public YinYangChromosome mutate() {
-        YinYangChromosome mutated = this.clone();
-        YinYangBoard board = mutated.getBoard();
+        System.out.println("\n=== Mutation Process Debug ===");
         int size = board.getSize();
+        int attempts = 0;
+        boolean mutated = false;
         
-        // Smart mutation: Try to fix connectivity issues
-        if (!board.isAllRegionsConnected()) {
-            // Find disconnected regions and try to connect them
-            for(int i = 0; i < size; i++) {
-                for(int j = 0; j < size; j++) {
-                    if(!board.isFixedCell(i, j)) {
-                        // Check if flipping this cell helps connectivity
-                        char original = board.getCell(i, j);
-                        char flipped = (original == YinYangBoard.BLACK) ? 
-                                      YinYangBoard.WHITE : YinYangBoard.BLACK;
-                        board.setCell(i, j, flipped);
-                        
-                        if(board.isAllRegionsConnected()) {
-                            return mutated;
-                        }
-                        board.setCell(i, j, original);
-                    }
-                }
+        while (!mutated && attempts < size * size) {
+            int i = random.nextInt(size);
+            int j = random.nextInt(size);
+            
+            System.out.printf("Attempt %d: Trying to mutate cell[%d,%d]\n", 
+                attempts + 1, i, j);
+            System.out.printf("Current value: %c, IsFixed: %b\n", 
+                board.getCell(i, j), board.isFixedCell(i, j));
+            
+            if (!board.isFixedCell(i, j)) {
+                char currentValue = board.getCell(i, j);
+                char newValue = (currentValue == YinYangBoard.BLACK) ? 
+                    YinYangBoard.WHITE : YinYangBoard.BLACK;
+                
+                board.setCell(i, j, newValue);
+                mutated = true;
+                
+                System.out.printf("Successfully mutated to: %c\n", newValue);
             }
+            attempts++;
         }
         
-        // Regular mutation if smart mutation didn't help
-        // Regular mutation if smart mutation didn't help
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (!board.isFixedCell(i, j) && random.nextDouble() < MUTATION_RATE) {
-                    char current = board.getCell(i, j);
-                    char newValue = (current == YinYangBoard.BLACK) ? YinYangBoard.WHITE : YinYangBoard.BLACK;
-                    board.setCell(i, j, newValue);
-                }
-            }
-        }
-        return mutated;
+        System.out.printf("Mutation %s after %d attempts\n", 
+            mutated ? "succeeded" : "failed", attempts);
+        
+        return this;
     }
 
     // Getter untuk board

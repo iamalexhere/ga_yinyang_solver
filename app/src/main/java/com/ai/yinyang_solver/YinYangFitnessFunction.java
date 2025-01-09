@@ -3,24 +3,26 @@ package com.ai.yinyang_solver;
 public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome, Double> {
     
     // Adjust weights for better balance
-    private static final double CONNECTIVITY_WEIGHT = 100.0;  // Increased
-    private static final double CROSSING_PATTERN_WEIGHT = 50.0;  // Increased
-    private static final double EMPTY_CELL_WEIGHT = 30.0;  // Increased
-    private static final double REGION_SIZE_WEIGHT = 20.0;  // New weight
+    private static final double CONNECTIVITY_WEIGHT = 100.0;
+    private static final double CROSSING_PATTERN_WEIGHT = 50.0;
+    private static final double EMPTY_CELL_WEIGHT = 30.0;
+    private static final double REGION_SIZE_WEIGHT = 5.0;  // Reduced weight for region balance
     
     @Override
     public Double calculate(YinYangChromosome chromosome) {
         YinYangBoard board = chromosome.getBoard();
         
-        double connectivityPenalty = board.isAllRegionsConnected() ? 0 : CONNECTIVITY_WEIGHT;
-        int crossPatternCount = board.slidingWindow();
-        int emptyCells = countEmptyCells(board);
-        double regionSizeBalance = calculateRegionSizeBalance(board);
-
-        return connectivityPenalty + 
-               crossPatternCount * CROSSING_PATTERN_WEIGHT + 
-               emptyCells * EMPTY_CELL_WEIGHT +
-               regionSizeBalance * REGION_SIZE_WEIGHT;
+        // If any critical criteria fails, return high penalty
+        if (!board.isAllRegionsConnected() || 
+            board.slidingWindow() > 0 || 
+            countEmptyCells(board) > 0) {
+            return CONNECTIVITY_WEIGHT * (!board.isAllRegionsConnected() ? 1 : 0) +
+                   CROSSING_PATTERN_WEIGHT * board.slidingWindow() +
+                   EMPTY_CELL_WEIGHT * countEmptyCells(board);
+        }
+        
+        // If all critical criteria pass, only consider region balance with reduced weight
+        return calculateRegionSizeBalance(board) * REGION_SIZE_WEIGHT;
     }
     
     // Hitung jumlah sel kosong
@@ -61,22 +63,27 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
         
         // Cek konektivitas
         boolean connected = board.isAllRegionsConnected();
-        description.append("Connectivity: ").append(connected ? "OK" : "Failed")
-                  .append(" (").append(connected ? 0 : -CONNECTIVITY_WEIGHT).append(" points)\n");
+        double connectivityPenalty = connected ? 0 : CONNECTIVITY_WEIGHT;
+        description.append("1. Connectivity: ").append(connected ? "OK" : "Failed")
+                  .append(" (").append(-connectivityPenalty).append(" points)\n");
         
         // Cek pola menyilang
         int crossingPatterns = board.slidingWindow();
-        description.append("Crossing Patterns: ").append(crossingPatterns)
-                  .append(" (").append(-crossingPatterns * CROSSING_PATTERN_WEIGHT).append(" points)\n");
+        double crossingPenalty = crossingPatterns * CROSSING_PATTERN_WEIGHT;
+        description.append("2. Crossing Patterns: ").append(crossingPatterns)
+                  .append(" (").append(-crossingPenalty).append(" points)\n");
         
         // Cek sel kosong
         int emptyCells = countEmptyCells(board);
-        description.append("Empty Cells: ").append(emptyCells)
-                  .append(" (").append(-emptyCells * EMPTY_CELL_WEIGHT).append(" points)\n");
+        double emptyPenalty = emptyCells * EMPTY_CELL_WEIGHT;
+        description.append("3. Empty Cells: ").append(emptyCells)
+                  .append(" (").append(-emptyPenalty).append(" points)\n");
         
-        // Total score
-        double totalScore = calculate(chromosome);
-        description.append("Total Fitness Score: ").append(totalScore);
+        // Cek keseimbangan region
+        double regionBalance = calculateRegionSizeBalance(board);
+        double regionPenalty = regionBalance * REGION_SIZE_WEIGHT;
+        description.append("4. Region Balance: ").append(String.format("%.2f", regionBalance))
+                  .append(" (").append(String.format("%.2f", -regionPenalty)).append(" points)\n");
         
         return description.toString();
     }
