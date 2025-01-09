@@ -1,139 +1,103 @@
 package com.ai.yinyang_solver;
+// Package untuk kelas-kelas yang berhubungan dengan fungsi fitness Yin Yang
 
 public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome, Double> {
     
     // Adjust weights for better balance
     private static final double CONNECTIVITY_WEIGHT = 100.0;
-    private static final double CROSSING_PATTERN_WEIGHT = 50.0;
-    private static final double EMPTY_CELL_WEIGHT = 30.0;
-    private static final double REGION_SIZE_WEIGHT = 5.0;  // Reduced weight for region balance
+    private static final double CROSSING_PATTERN_WEIGHT = 25.0;
+    private static final double EMPTY_CELL_WEIGHT = 15.0;
+    private static final double REGION_SIZE_WEIGHT = 5.0;
     
     @Override
     public Double calculate(YinYangChromosome chromosome) {
-        YinYangBoard board = chromosome.getBoard();
+        YinYangBoard board = chromosome.getBoard(); // Mendapatkan board dari kromosom
         
         // If any critical criteria fails, return high penalty
-        if (!board.isAllRegionsConnected() || 
-            board.slidingWindow() > 0 || 
-            countEmptyCells(board) > 0) {
-            return CONNECTIVITY_WEIGHT * (!board.isAllRegionsConnected() ? 1 : 0) +
-                   CROSSING_PATTERN_WEIGHT * board.slidingWindow() +
-                   EMPTY_CELL_WEIGHT * countEmptyCells(board);
+        if (!board.isAllRegionsConnected() ||  // Jika region tidak terhubung
+            board.slidingWindow() > 0 ||  // Jika ada pola menyilang
+            countEmptyCells(board) > 0) { // Jika ada sel kosong
+            // Mengembalikan penalti tinggi jika salah satu kriteria utama gagal
+            return CONNECTIVITY_WEIGHT * (!board.isAllRegionsConnected() ? 1 : 0) + // Penalti konektivitas
+                   CROSSING_PATTERN_WEIGHT * board.slidingWindow() + // Penalti pola menyilang
+                   EMPTY_CELL_WEIGHT * countEmptyCells(board); // Penalti sel kosong
         }
         
         // If all critical criteria pass, only consider region balance with reduced weight
-        return calculateRegionSizeBalance(board) * REGION_SIZE_WEIGHT;
+        return calculateRegionSizeBalance(board) * REGION_SIZE_WEIGHT; // Jika semua kriteria utama terpenuhi, hanya hitung keseimbangan region
     }
     
     // Hitung jumlah sel kosong
     private int countEmptyCells(YinYangBoard board) {
-        int count = 0;
-        int size = board.getSize();
+        int count = 0; // Inisialisasi jumlah sel kosong
+        int size = board.getSize(); // Mendapatkan ukuran board
         
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (board.getCell(i, j) == YinYangBoard.EMPTY) {
-                    count++;
+                if (board.getCell(i, j) == YinYangBoard.EMPTY) { // Jika sel kosong
+                    count++; // Increment jumlah sel kosong
                 }
             }
         }
         
-        return count;
+        return count; // Mengembalikan jumlah sel kosong
     }
     
+    // Method untuk menghitung keseimbangan ukuran region
     private double calculateRegionSizeBalance(YinYangBoard board) {
         // Calculate difference between black and white region sizes
-        int blackCount = 0, whiteCount = 0;
-        int size = board.getSize();
+        int blackCount = 0, whiteCount = 0; // Inisialisasi jumlah sel hitam dan putih
+        int size = board.getSize(); // Mendapatkan ukuran board
         
         for(int i = 0; i < size; i++) {
             for(int j = 0; j < size; j++) {
-                if(board.getCell(i,j) == YinYangBoard.BLACK) blackCount++;
-                else if(board.getCell(i,j) == YinYangBoard.WHITE) whiteCount++;
+                if(board.getCell(i,j) == YinYangBoard.BLACK) blackCount++; // Jika sel hitam, increment jumlah sel hitam
+                else if(board.getCell(i,j) == YinYangBoard.WHITE) whiteCount++; // Jika sel putih, increment jumlah sel putih
             }
         }
         
+        // Mengembalikan selisih absolut antara jumlah sel hitam dan putih, dinormalisasi dengan ukuran board
         return Math.abs(blackCount - whiteCount) / (double)(size * size);
     }
     
     // Method untuk mendapatkan deskripsi detail fitness
     public String getFitnessDescription(YinYangChromosome chromosome) {
-        YinYangBoard board = chromosome.getBoard();
-        StringBuilder description = new StringBuilder();
+        YinYangBoard board = chromosome.getBoard(); // Mendapatkan board dari kromosom
+        StringBuilder description = new StringBuilder(); // Membuat string builder untuk deskripsi
         
         // Cek konektivitas
-        boolean connected = board.isAllRegionsConnected();
-        double connectivityPenalty = connected ? 0 : CONNECTIVITY_WEIGHT;
-        description.append("1. Connectivity: ").append(connected ? "OK" : "Failed")
-                  .append(" (").append(-connectivityPenalty).append(" points)\n");
+        boolean connected = board.isAllRegionsConnected(); // Cek apakah semua region terhubung
+        double connectivityPenalty = connected ? 0 : CONNECTIVITY_WEIGHT; // Penalti konektivitas, 0 jika terhubung, CONNECTIVITY_WEIGHT jika tidak
+        description.append("1. Connectivity: ").append(connected ? "OK" : "Failed") // Menambahkan status konektivitas ke deskripsi
+                  .append(" (").append(-connectivityPenalty).append(" points)\n"); // Menambahkan penalti konektivitas ke deskripsi
         
         // Cek pola menyilang
-        int crossingPatterns = board.slidingWindow();
-        double crossingPenalty = crossingPatterns * CROSSING_PATTERN_WEIGHT;
-        description.append("2. Crossing Patterns: ").append(crossingPatterns)
-                  .append(" (").append(-crossingPenalty).append(" points)\n");
+        int crossingPatterns = board.slidingWindow(); // Menghitung jumlah pola menyilang
+        double crossingPenalty = crossingPatterns * CROSSING_PATTERN_WEIGHT; // Menghitung penalti pola menyilang
+        description.append("2. Crossing Patterns: ").append(crossingPatterns) // Menambahkan jumlah pola menyilang ke deskripsi
+                  .append(" (").append(-crossingPenalty).append(" points)\n"); // Menambahkan penalti pola menyilang ke deskripsi
         
         // Cek sel kosong
-        int emptyCells = countEmptyCells(board);
-        double emptyPenalty = emptyCells * EMPTY_CELL_WEIGHT;
-        description.append("3. Empty Cells: ").append(emptyCells)
-                  .append(" (").append(-emptyPenalty).append(" points)\n");
+        int emptyCells = countEmptyCells(board); // Menghitung jumlah sel kosong
+        double emptyPenalty = emptyCells * EMPTY_CELL_WEIGHT; // Menghitung penalti sel kosong
+        description.append("3. Empty Cells: ").append(emptyCells) // Menambahkan jumlah sel kosong ke deskripsi
+                  .append(" (").append(-emptyPenalty).append(" points)\n"); // Menambahkan penalti sel kosong ke deskripsi
         
         // Cek keseimbangan region
-        double regionBalance = calculateRegionSizeBalance(board);
-        double regionPenalty = regionBalance * REGION_SIZE_WEIGHT;
-        description.append("4. Region Balance: ").append(String.format("%.2f", regionBalance))
-                  .append(" (").append(String.format("%.2f", -regionPenalty)).append(" points)\n");
+        double regionBalance = calculateRegionSizeBalance(board); // Menghitung keseimbangan region
+        double regionPenalty = regionBalance * REGION_SIZE_WEIGHT; // Menghitung penalti keseimbangan region
+        description.append("4. Region Balance: ").append(String.format("%.2f", regionBalance)) // Menambahkan keseimbangan region ke deskripsi
+                  .append(" (").append(String.format("%.2f", -regionPenalty)).append(" points)\n"); // Menambahkan penalti keseimbangan region ke deskripsi
         
-        return description.toString();
+        return description.toString(); // Mengembalikan deskripsi fitness
     }
     
     // Method untuk mengecek apakah solusi sudah optimal
     public boolean isOptimalSolution(YinYangChromosome chromosome) {
-        return calculate(chromosome) <= 0.1;  // Changed from >= 99.9 to <= 0.1
+        return calculate(chromosome) <= 0.1;  // Mengembalikan true jika fitness kurang dari atau sama dengan 0.1, menandakan solusi optimal
     }
 
     public YinYangFitnessFunction() {
-        
+        // Constructor kosong
     }
-
-    // private int[] countComponentsForEachColor(char[] board) {
-    //     boolean[] visited = new boolean[board.length];
-    //     int blackComponents = 0;
-    //     int whiteComponents = 0;
-
-    //     for(int i = 0;i < board.length;i++) {
-    //         if(!visited[i]) {
-    //             if(board[i] == '1' || board[i] == '3') {
-    //                 dfs(i, board, visited, board[i]);
-    //                 blackComponents += 1;
-    //             }else{
-    //                 dfs(i, board, visited, board[i]);
-    //                 whiteComponents += 1;
-    //             }
-    //         }
-    //     }
-
-    //     int[] result = new int[2];
-    //     result[0] = blackComponents;
-    //     result[1] = whiteComponents;
-
-    //     return result;
-    // }
-
-    // private void dfs(int idx, char[] board, boolean[] visited, char target) {
-    //     if(idx < 0 || idx >= board.length || visited[idx] || board[idx] != target) {
-    //         return;
-    //     }
-
-    //     visited[idx] = true;
-
-    //     int row = idx / width;
-    //     int col = idx % width;
-
-    //     if(row > 0) dfs(idx-width, board, visited, target);
-    //     if(row < height - 1) dfs(idx+width, board, visited, target);
-    //     if(col > 0) dfs(idx-1, board, visited, target);
-    //     if(col < width - 1) dfs(idx+1, board, visited, target);
-    // }
 }
