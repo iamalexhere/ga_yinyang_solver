@@ -83,19 +83,40 @@ public class YinYangChromosome implements Chromosome<YinYangChromosome> {
     public YinYangChromosome mutate() {
         YinYangChromosome mutated = new YinYangChromosome(this.board);
         int size = board.getSize();
+        boolean didMutate = false;  // Flag untuk memastikan setidaknya satu mutasi terjadi
         
-        // Loop setiap sel
+        // Loop setiap sel dan coba mutasi
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                // Hanya mutasi sel yang bukan fix (bukan sel awal)
-                char currentCell = mutated.board.getCell(i, j);
-                if (currentCell != YinYangBoard.EMPTY && 
-                    random.nextDouble() < MUTATION_RATE) {
-                    // Flip warna (BLACK <-> WHITE)
+                // Skip sel yang merupakan bagian dari board awal
+                if (board.isFixedCell(i, j)) continue;
+                
+                // Lakukan mutasi dengan probabilitas MUTATION_RATE
+                if (random.nextDouble() < MUTATION_RATE) {
+                    char currentCell = mutated.board.getCell(i, j);
                     char newValue = (currentCell == YinYangBoard.BLACK) ? 
                                    YinYangBoard.WHITE : YinYangBoard.BLACK;
                     mutated.board.setCell(i, j, newValue);
+                    didMutate = true;
                 }
+            }
+        }
+        
+        // Jika tidak ada mutasi yang terjadi, paksa satu mutasi
+        if (!didMutate) {
+            // Pilih sel random yang bukan fixed cell
+            int attempts = 0;
+            while (attempts < size * size) {
+                int i = random.nextInt(size);
+                int j = random.nextInt(size);
+                if (!board.isFixedCell(i, j)) {
+                    char currentCell = mutated.board.getCell(i, j);
+                    char newValue = (currentCell == YinYangBoard.BLACK) ? 
+                                   YinYangBoard.WHITE : YinYangBoard.BLACK;
+                    mutated.board.setCell(i, j, newValue);
+                    break;
+                }
+                attempts++;
             }
         }
         

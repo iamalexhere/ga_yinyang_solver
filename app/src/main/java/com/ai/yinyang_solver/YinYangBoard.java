@@ -3,6 +3,7 @@ package com.ai.yinyang_solver;
 public class YinYangBoard {
     private char[][] board;
     private int size;
+    private char[][] initialBoard; // Add this field to store initial board state
 
     // Constants untuk representasi sel
     public static final char EMPTY = '0';
@@ -13,10 +14,12 @@ public class YinYangBoard {
     public YinYangBoard(int size) {
         this.size = size;
         this.board = new char[size][size];
+        this.initialBoard = new char[size][size];
         // Inisialisasi board kosong
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 board[i][j] = EMPTY;
+                initialBoard[i][j] = EMPTY;
             }
         }
     }
@@ -25,8 +28,10 @@ public class YinYangBoard {
     public YinYangBoard(char[][] initialBoard) {
         this.size = initialBoard.length;
         this.board = new char[size][size];
+        this.initialBoard = new char[size][size];
         for (int i = 0; i < size; i++) {
             System.arraycopy(initialBoard[i], 0, board[i], 0, size);
+            System.arraycopy(initialBoard[i], 0, this.initialBoard[i], 0, size);
         }
     }
     
@@ -113,25 +118,29 @@ public class YinYangBoard {
 
     public int slidingWindow() {
         int crossCount = 0;
-
-        for(int i = 1;i < size-1;i++) {
-            for(int j = 1;j < size-1;j++) {
+        
+        // Check each possible 2x2 window
+        for(int i = 0; i < size - 1; i++) {
+            for(int j = 0; j < size - 1; j++) {
                 if(isColorCross(i, j)) {
-                    crossCount += 1;
+                    crossCount++;
                 }
             }
         }
-
         return crossCount;
     }
 
     private boolean isColorCross(int i, int j) {
-        char topLeft = board[i - 1][j - 1];
-        char topRight = board[i - 1][j];
-        char bottomLeft = board[i][j-1];
-        char bottomRight = board[i][j];
+        // Validate window bounds
+        if(i + 1 >= size || j + 1 >= size) return false;
+        
+        char topLeft = board[i][j];
+        char topRight = board[i][j + 1];
+        char bottomLeft = board[i + 1][j];
+        char bottomRight = board[i + 1][j + 1];
 
-        return (topLeft == 'B' && topRight == 'W' && bottomLeft == 'W' && bottomRight == 'B') || (topLeft == 'W' && topRight == 'B' && bottomLeft == 'B' && bottomRight == 'W');
+        return (topLeft == BLACK && topRight == WHITE && bottomLeft == WHITE && bottomRight == BLACK) ||
+               (topLeft == WHITE && topRight == BLACK && bottomLeft == BLACK && bottomRight == WHITE);
     }
     
     // Cek pola menyilang dalam kotak 2x2
@@ -159,7 +168,10 @@ public class YinYangBoard {
     //             board[i][j+1] == BLACK && board[i+1][j] == BLACK);
     // }
 
-
+    // Add method to check if cell was fixed in initial board
+    public boolean isFixedCell(int i, int j) {
+        return initialBoard[i][j] != EMPTY;
+    }
     
     // Getter dan setter
     public char getCell(int i, int j) {
@@ -180,7 +192,12 @@ public class YinYangBoard {
         for (int i = 0; i < size; i++) {
             System.arraycopy(board[i], 0, newBoard[i], 0, size);
         }
-        return new YinYangBoard(newBoard);
+        YinYangBoard clone = new YinYangBoard(newBoard);
+        // Copy initial board to maintain fixed cells information
+        for (int i = 0; i < size; i++) {
+            System.arraycopy(initialBoard[i], 0, clone.initialBoard[i], 0, size);
+        }
+        return clone;
     }
     
     // ToString untuk debugging
