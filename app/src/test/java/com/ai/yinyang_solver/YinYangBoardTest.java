@@ -61,6 +61,115 @@ public class YinYangBoardTest {
         YinYangBoard board2 = new YinYangBoard(noCrossingBoard);
         assertEquals(0, board2.slidingWindow());
     }
+
+    @Test
+    public void testSlidingWindowNoCrossPattern() {
+        char[][] board = {
+            {'B', 'B', 'W'},
+            {'B', 'B', 'W'},
+            {'W', 'W', 'W'}
+        };
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(0, yinYangBoard.slidingWindow());
+    }
+
+    @Test
+    public void testSlidingWindowSingleCrossPattern() {
+        char[][] board = {
+            {'B', 'W', 'B'},
+            {'W', 'B', 'W'},
+            {'B', 'W', 'B'}
+        };
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(4, yinYangBoard.slidingWindow());
+    }
+
+    @Test
+    public void testSlidingWindowMultipleCrossPatterns() {
+        char[][] board = {
+            {'B', 'W', 'B', 'W'},
+            {'W', 'B', 'W', 'B'},
+            {'B', 'W', 'B', 'W'},
+            {'W', 'B', 'W', 'B'}
+        };
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(9, yinYangBoard.slidingWindow());
+    }
+
+    @Test
+    public void testSlidingWindowBorderCrossPattern() {
+        char[][] board = {
+            {'B', 'W'},
+            {'W', 'B'}
+        };
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(1, yinYangBoard.slidingWindow());
+    }
+
+    @Test
+    public void testSlidingWindowWithEmptyCells() {
+        char[][] board = {
+            {'B', 'W', '0'},
+            {'W', 'B', '0'},
+            {'0', '0', '0'}
+        };
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(1, yinYangBoard.slidingWindow());
+    }
+
+    @Test
+    public void testSlidingWindowAllSameColor() {
+        char[][] board = {
+            {'B', 'B', 'B'},
+            {'B', 'B', 'B'},
+            {'B', 'B', 'B'}
+        };
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(0, yinYangBoard.slidingWindow());
+    }
+
+    @Test
+    public void testSlidingWindowAlternatingRows() {
+        char[][] board = {
+            {'B', 'B', 'B'},
+            {'W', 'W', 'W'},
+            {'B', 'B', 'B'}
+        };
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(0, yinYangBoard.slidingWindow());
+    }
+
+    @Test
+    public void testSlidingWindowDiagonalPattern() {
+        char[][] board = {
+            {'B', 'W', 'B'},
+            {'W', 'B', 'W'},
+            {'B', 'W', 'B'}
+        };
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(4, yinYangBoard.slidingWindow());
+    }
+
+    @Test
+    public void testSlidingWindowSingleCell() {
+        char[][] board = {{'B'}};
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(0, yinYangBoard.slidingWindow());
+    }
+
+    @Test
+    public void testSlidingWindowLargeBoard() {
+        // Create a 5x5 board with alternating pattern
+        char[][] board = {
+            {'B', 'W', 'B', 'W', 'B'},
+            {'W', 'B', 'W', 'B', 'W'},
+            {'B', 'W', 'B', 'W', 'B'},
+            {'W', 'B', 'W', 'B', 'W'},
+            {'B', 'W', 'B', 'W', 'B'}
+        };
+        YinYangBoard yinYangBoard = new YinYangBoard(board);
+        assertEquals(16, yinYangBoard.slidingWindow());
+    }
     
     @Test
     public void testConversion1D2D() {

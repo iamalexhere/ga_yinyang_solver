@@ -118,25 +118,29 @@ public class YinYangBoard {
 
     public int slidingWindow() {
         int crossCount = 0;
-
-        for(int i = 1;i < size-1;i++) {
-            for(int j = 1;j < size-1;j++) {
+        
+        // Check each possible 2x2 window
+        for(int i = 0; i < size - 1; i++) {
+            for(int j = 0; j < size - 1; j++) {
                 if(isColorCross(i, j)) {
-                    crossCount += 1;
+                    crossCount++;
                 }
             }
         }
-
         return crossCount;
     }
 
     private boolean isColorCross(int i, int j) {
-        char topLeft = board[i - 1][j - 1];
-        char topRight = board[i - 1][j];
-        char bottomLeft = board[i][j-1];
-        char bottomRight = board[i][j];
+        // Validate window bounds
+        if(i + 1 >= size || j + 1 >= size) return false;
+        
+        char topLeft = board[i][j];
+        char topRight = board[i][j + 1];
+        char bottomLeft = board[i + 1][j];
+        char bottomRight = board[i + 1][j + 1];
 
-        return (topLeft == 'B' && topRight == 'W' && bottomLeft == 'W' && bottomRight == 'B') || (topLeft == 'W' && topRight == 'B' && bottomLeft == 'B' && bottomRight == 'W');
+        return (topLeft == BLACK && topRight == WHITE && bottomLeft == WHITE && bottomRight == BLACK) ||
+               (topLeft == WHITE && topRight == BLACK && bottomLeft == BLACK && bottomRight == WHITE);
     }
     
     // Cek pola menyilang dalam kotak 2x2
