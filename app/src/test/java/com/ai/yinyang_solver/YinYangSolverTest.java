@@ -35,21 +35,16 @@ public class YinYangSolverTest {
         };
         
         YinYangSolver solver = new YinYangSolver(board);
-        
-        // Create initial board with random filled cells
-        YinYangBoard initialBoard = new YinYangBoard(board);
-        YinYangChromosome initialChromosome = new YinYangChromosome(initialBoard);
-        initialChromosome.initializeRandom(); // Fill empty cells randomly
-        
-        // Solve puzzle
         YinYangBoard solution = solver.solve();
         
+        // Test specific properties of the solution instead
         YinYangFitnessFunction fitnessFunction = new YinYangFitnessFunction();
-        double initialFitness = fitnessFunction.calculate(initialChromosome);
         double finalFitness = fitnessFunction.calculate(new YinYangChromosome(solution));
         
-        // Final fitness should be better (smaller) than initial fitness
-        assertTrue("Final fitness should be better than initial", finalFitness < initialFitness);
+        // Verify the solution has good fitness
+        assertTrue("Final fitness should be close to optimal", finalFitness <= 0.1);
+        assertTrue("Solution should have connected regions", solution.isAllRegionsConnected());
+        assertEquals("Solution should not have crossing patterns", 0, solution.slidingWindow());
     }
 
     @Test
