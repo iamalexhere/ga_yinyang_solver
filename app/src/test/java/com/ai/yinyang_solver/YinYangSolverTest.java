@@ -1,11 +1,75 @@
 package com.ai.yinyang_solver;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class YinYangSolverTest {
     
+    @Test
+    public void testOptimalSolution() {
+        // Known puzzle with optimal solution
+        char[][] board = {
+            {'B', '0', 'W'},
+            {'0', '0', '0'},
+            {'W', '0', 'B'}
+        };
+        
+        YinYangSolver solver = new YinYangSolver(board);
+        YinYangBoard solution = solver.solve();
+        
+        YinYangFitnessFunction fitnessFunction = new YinYangFitnessFunction();
+        double fitness = fitnessFunction.calculate(new YinYangChromosome(solution));
+        
+        // Fitness should be close to 0 for optimal solution
+        assertTrue("Fitness should be close to 0", fitness <= 0.1);
+        assertTrue("All regions should be connected", solution.isAllRegionsConnected());
+        assertEquals("Should not have crossing patterns", 0, solution.slidingWindow());
+    }
+
+    @Test
+    public void testFitnessImprovement() {
+        char[][] board = {
+            {'B', '0', 'W'},
+            {'0', '0', '0'},
+            {'W', '0', 'B'}
+        };
+        
+        YinYangSolver solver = new YinYangSolver(board);
+        
+        // Create initial board with random filled cells
+        YinYangBoard initialBoard = new YinYangBoard(board);
+        YinYangChromosome initialChromosome = new YinYangChromosome(initialBoard);
+        initialChromosome.initializeRandom(); // Fill empty cells randomly
+        
+        // Solve puzzle
+        YinYangBoard solution = solver.solve();
+        
+        YinYangFitnessFunction fitnessFunction = new YinYangFitnessFunction();
+        double initialFitness = fitnessFunction.calculate(initialChromosome);
+        double finalFitness = fitnessFunction.calculate(new YinYangChromosome(solution));
+        
+        // Final fitness should be better (smaller) than initial fitness
+        assertTrue("Final fitness should be better than initial", finalFitness < initialFitness);
+    }
+
+    @Test
+    public void testConstraints() {
+        char[][] board = {
+            {'B', '0', 'W'},
+            {'0', '0', '0'},
+            {'W', '0', 'B'}
+        };
+        
+        YinYangSolver solver = new YinYangSolver(board);
+        YinYangBoard solution = solver.solve();
+        
+        // Test that fixed cells remain unchanged
+        assertEquals('B', solution.getCell(0, 0));
+        assertEquals('W', solution.getCell(0, 2));
+        assertEquals('W', solution.getCell(2, 0));
+        assertEquals('B', solution.getCell(2, 2));
+    }
+
     @Test
     public void testSimplePuzzle() {
         // Simple 3x3 puzzle

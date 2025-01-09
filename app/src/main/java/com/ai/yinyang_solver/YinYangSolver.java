@@ -6,7 +6,7 @@ public class YinYangSolver {
     private static final int POPULATION_SIZE = 100;
     private static final int MAX_GENERATIONS = 1000;
     private static final int MAX_STAGNANT_GENERATIONS = 50;
-    private static final double PERFECT_FITNESS = 99.9;
+    private static final double PERFECT_FITNESS = 0.0; // Changed to 0.0 since we want minimum
 
     private final YinYangBoard initialBoard;
     private final YinYangPopulation population;
@@ -23,7 +23,7 @@ public class YinYangSolver {
         this.population = new YinYangPopulation(fitnessFunction);
         this.currentGeneration = 0;
         this.stagnantGenerations = 0;
-        this.bestFitness = Double.NEGATIVE_INFINITY;
+        this.bestFitness = Double.POSITIVE_INFINITY; // Changed to POSITIVE_INFINITY
     }
 
     // Method utama untuk menjalankan solver
@@ -44,7 +44,7 @@ public class YinYangSolver {
             double currentFitness = fitnessFunction.calculate(bestChromosome);
 
             // Update stagnant generations
-            if (currentFitness > bestFitness) {
+            if (currentFitness < bestFitness) { // Changed from > to <
                 bestFitness = currentFitness;
                 stagnantGenerations = 0;
 
@@ -79,7 +79,7 @@ public class YinYangSolver {
     // Cek apakah algoritma harus berhenti
     private boolean shouldTerminate() {
         // 1. Solusi optimal ditemukan
-        if (bestFitness >= PERFECT_FITNESS) {
+        if (bestFitness <= PERFECT_FITNESS) { // Changed from >= to <=
             System.out.println("Perfect solution found!");
             return true;
         }

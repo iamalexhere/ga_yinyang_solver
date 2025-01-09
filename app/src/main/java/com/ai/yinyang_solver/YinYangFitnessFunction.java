@@ -63,7 +63,7 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
     
     // Method untuk mengecek apakah solusi sudah optimal
     public boolean isOptimalSolution(YinYangChromosome chromosome) {
-        return calculate(chromosome) >= 99.9;  // Menggunakan threshold untuk floating point
+        return calculate(chromosome) <= 0.1;  // Changed from >= 99.9 to <= 0.1
     }
 
     public YinYangFitnessFunction() {

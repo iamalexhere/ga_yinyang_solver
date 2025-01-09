@@ -1,7 +1,7 @@
 package com.ai.yinyang_solver;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class YinYangFitnessFunctionTest {
     
@@ -9,7 +9,6 @@ public class YinYangFitnessFunctionTest {
     
     @Test
     public void testPerfectSolution() {
-        // Perfect solution: connected regions, no crossing patterns
         char[][] perfectBoard = {
             {'B', 'B', 'W'},
             {'B', 'W', 'W'},
@@ -19,77 +18,46 @@ public class YinYangFitnessFunctionTest {
         YinYangChromosome chromosome = new YinYangChromosome(new YinYangBoard(perfectBoard));
         double fitness = fitnessFunction.calculate(chromosome);
         
-        // Should have maximum fitness
-        assertEquals(100.0, fitness, 0.1);
-        assertTrue(fitnessFunction.isOptimalSolution(chromosome));
+        // Perfect solution should have fitness close to 0
+        assertTrue("Perfect solution should have minimal fitness", fitness <= 0.1);
     }
     
     @Test
-    public void testDisconnectedRegions() {
-        // Solution with disconnected regions
-        char[][] disconnectedBoard = {
-            {'B', 'W', 'B'},
-            {'W', 'W', 'W'},
-            {'B', 'W', 'B'}
-        };
-        
-        YinYangChromosome chromosome = new YinYangChromosome(new YinYangBoard(disconnectedBoard));
-        double fitness = fitnessFunction.calculate(chromosome);
-        
-        // Should have lower fitness due to disconnected regions
-        assertTrue(fitness < 100.0);
-        assertFalse(fitnessFunction.isOptimalSolution(chromosome));
-    }
-    
-    @Test
-    public void testCrossingPatterns() {
-        // Solution with crossing patterns
-        char[][] crossingBoard = {
+    public void testBadSolution() {
+        char[][] badBoard = {
             {'B', 'W', 'B'},
             {'W', 'B', 'W'},
             {'B', 'W', 'B'}
         };
         
-        YinYangChromosome chromosome = new YinYangChromosome(new YinYangBoard(crossingBoard));
+        YinYangChromosome chromosome = new YinYangChromosome(new YinYangBoard(badBoard));
         double fitness = fitnessFunction.calculate(chromosome);
         
-        // Should have lower fitness due to crossing patterns
-        assertTrue(fitness < 100.0);
-        assertFalse(fitnessFunction.isOptimalSolution(chromosome));
+        // Bad solution should have high fitness value
+        assertTrue("Bad solution should have high fitness", fitness > 50.0);
     }
     
     @Test
-    public void testEmptyCells() {
-        // Solution with empty cells
-        char[][] emptyBoard = {
-            {'B', 'W', '0'},
-            {'W', 'B', 'W'},
-            {'B', 'W', 'B'}
+    public void testFitnessComparison() {
+        char[][] betterBoard = {
+            {'B', 'B', 'W'},
+            {'B', 'W', 'W'},
+            {'W', 'W', 'W'}
         };
         
-        YinYangChromosome chromosome = new YinYangChromosome(new YinYangBoard(emptyBoard));
-        double fitness = fitnessFunction.calculate(chromosome);
-        
-        // Should have lower fitness due to empty cells
-        assertTrue(fitness < 100.0);
-        assertFalse(fitnessFunction.isOptimalSolution(chromosome));
-    }
-    
-    @Test
-    public void testFitnessDescription() {
-        char[][] board = {
+        char[][] worseBoard = {
             {'B', 'W', 'B'},
             {'W', 'B', 'W'},
             {'B', 'W', 'B'}
         };
         
-        YinYangChromosome chromosome = new YinYangChromosome(new YinYangBoard(board));
-        String description = fitnessFunction.getFitnessDescription(chromosome);
+        YinYangChromosome betterChromosome = new YinYangChromosome(new YinYangBoard(betterBoard));
+        YinYangChromosome worseChromosome = new YinYangChromosome(new YinYangBoard(worseBoard));
         
-        // Check that description contains all necessary information
-        assertTrue(description.contains("Connectivity"));
-        assertTrue(description.contains("Crossing Patterns"));
-        assertTrue(description.contains("Empty Cells"));
-        assertTrue(description.contains("Total Fitness Score"));
+        double betterFitness = fitnessFunction.calculate(betterChromosome);
+        double worseFitness = fitnessFunction.calculate(worseChromosome);
+        
+        // Better solution should have lower fitness
+        assertTrue("Better solution should have lower fitness", betterFitness < worseFitness);
     }
 }

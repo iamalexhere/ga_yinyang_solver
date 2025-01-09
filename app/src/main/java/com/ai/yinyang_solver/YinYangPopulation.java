@@ -25,14 +25,14 @@ public class YinYangPopulation extends Population<YinYangChromosome> {
     // Implementasi Tournament Selection
     protected YinYangChromosome tournamentSelection() {
         YinYangChromosome best = null;
-        double bestFitness = Double.NEGATIVE_INFINITY;
+        double bestFitness = Double.POSITIVE_INFINITY; // Changed from NEGATIVE_INFINITY
         
         // Pilih TOURNAMENT_SIZE kromosom secara random dan ambil yang terbaik
         for (int i = 0; i < TOURNAMENT_SIZE; i++) {
             YinYangChromosome candidate = getRandomChromosome();
             double fitness = fitnessFunction.calculate(candidate);
             
-            if (fitness > bestFitness) {
+            if (fitness < bestFitness) { // Changed from > to <
                 best = candidate;
                 bestFitness = fitness;
             }
@@ -76,11 +76,11 @@ public class YinYangPopulation extends Population<YinYangChromosome> {
     // Method untuk mendapatkan kromosom terbaik
     protected YinYangChromosome getBestChromosome() {
         YinYangChromosome best = null;
-        double bestFitness = Double.NEGATIVE_INFINITY;
+        double bestFitness = Double.POSITIVE_INFINITY; // Changed from NEGATIVE_INFINITY
         
         for (YinYangChromosome chromosome : this) {
             double fitness = fitnessFunction.calculate(chromosome);
-            if (fitness > bestFitness) {
+            if (fitness < bestFitness) { // Changed from > to <
                 best = chromosome;
                 bestFitness = fitness;
             }

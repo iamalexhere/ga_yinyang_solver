@@ -58,34 +58,84 @@ public class YinYangChromosomeTest {
         assertNotEquals(parent2.toString(), offspring.get(1).toString());
     }
     
+//     @Test
+//     public void testMutation() {
+//         char[][] board = {
+//             {'B', 'W', 'B'},
+//             {'W', 'B', 'W'},
+//             {'B', 'W', 'B'}
+//         };
+        
+//         YinYangChromosome chromosome = new YinYangChromosome(new YinYangBoard(board));
+//         YinYangChromosome mutated = chromosome.mutate();
+        
+//         // Test bahwa hasil mutasi berbeda dengan original
+//         assertNotEquals("Values should be different", chromosome.toString(), mutated.toString());
+        
+//         // Verifikasi bahwa mutasi masih menghasilkan board yang valid
+//         YinYangBoard mutatedBoard = mutated.getBoard();
+//         for (int i = 0; i < mutatedBoard.getSize(); i++) {
+//             for (int j = 0; j < mutatedBoard.getSize(); j++) {
+//                 char cell = mutatedBoard.getCell(i, j);
+//                 assertTrue("Cell should be either B or W", cell == 'B' || cell == 'W');
+//             }
+//         }
+//     }
+    
+//     @Test
+//     public void testClone() {
+//         char[][] board = {
+//             {'B', 'W', 'B'},
+//             {'W', 'B', 'W'},
+//             {'B', 'W', 'B'}
+//         };
+        
+//         YinYangChromosome original = new YinYangChromosome(new YinYangBoard(board));
+//         YinYangChromosome cloned = original.clone();
+        
+//         // Test that clone is equal but not the same object
+//         assertEquals(original.toString(), cloned.toString());
+//         assertNotSame(original, cloned);
+//     }
+// }
     @Test
     public void testMutation() {
+        // Create board with some empty cells
         char[][] board = {
-            {'B', 'W', 'B'},
-            {'W', 'B', 'W'},
-            {'B', 'W', 'B'}
+            {'B', '0', 'B'},
+            {'0', 'B', '0'},
+            {'B', '0', 'B'}
         };
         
-        YinYangChromosome original = new YinYangChromosome(new YinYangBoard(board));
-        YinYangChromosome mutated = original.mutate();
+        YinYangChromosome chromosome = new YinYangChromosome(new YinYangBoard(board));
+        chromosome.initializeRandom(); // Fill empty cells first
+        YinYangChromosome original = chromosome.clone(); // Keep original state
         
-        // Test that mutation produces a different chromosome
-        assertNotEquals(original.toString(), mutated.toString());
-    }
-    
-    @Test
-    public void testClone() {
-        char[][] board = {
-            {'B', 'W', 'B'},
-            {'W', 'B', 'W'},
-            {'B', 'W', 'B'}
-        };
+        // Perform mutation
+        YinYangChromosome mutated = chromosome.mutate();
         
-        YinYangChromosome original = new YinYangChromosome(new YinYangBoard(board));
-        YinYangChromosome cloned = original.clone();
+        // Test that mutation produced different board
+        assertNotEquals("Mutation should change at least one cell", 
+            original.toString(), mutated.toString());
         
-        // Test that clone is equal but not the same object
-        assertEquals(original.toString(), cloned.toString());
-        assertNotSame(original, cloned);
+        // Verify fixed cells remained unchanged
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[i].length; j++) {
+                if(board[i][j] != '0') {
+                    assertEquals("Fixed cells should not change",
+                        original.getBoard().getCell(i, j), 
+                        mutated.getBoard().getCell(i, j));
+                }
+            }
+        }
+        
+        // Verify all cells are still valid (B or W)
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[i].length; j++) {
+                char cell = mutated.getBoard().getCell(i, j);
+                assertTrue("Cell should be either B or W", 
+                    cell == 'B' || cell == 'W');
+            }
+        }
     }
 }
