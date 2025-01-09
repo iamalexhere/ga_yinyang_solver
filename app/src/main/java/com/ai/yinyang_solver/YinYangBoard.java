@@ -57,63 +57,50 @@ public class YinYangBoard {
     
     // Cek apakah semua region terhubung
     public boolean isAllRegionsConnected() {
-        if(Math.abs(isRegionConnected(BLACK) - isRegionConnected(WHITE)) == 0) {
-            return true;
-        }
-        return false;
-    }
-    
-    // Helper method untuk cek konektivitas satu warna
-    protected int isRegionConnected(char color) {
-        // Temporary array untuk marking
+        // Count the components of each color
+        int blackComponents = 0;
+        int whiteComponents = 0;
+        boolean hasBlack = false;
+        boolean hasWhite = false;
+        
+        // Create visited array
         boolean[][] visited = new boolean[size][size];
-        int componentCount = 1;
         
-        // Cari sel pertama dengan warna yang dicari
-        int startI = -1, startJ = -1;
-        for (int i = 0; i < size && startI == -1; i++) {
-            for (int j = 0; j < size; j++) {
-                if (board[i][j] == color) {
-                    startI = i;
-                    startJ = j;
-                    break;
-                }
-            }
-        }
-        
-        // Jika tidak ada sel dengan warna tersebut
-        if (startI == -1) return 0;
-        
-        // DFS dari sel pertama
-        dfs(startI, startJ, color, visited);
-        
-        // Cek apakah semua sel dengan warna yang sama sudah dikunjungi
+        // Count connected components for each color
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (board[i][j] == color && !visited[i][j]) {
-                    dfs(i, j, color, visited);
-                    componentCount++;
+                if (!visited[i][j]) {
+                    if (board[i][j] == BLACK) {
+                        hasBlack = true;
+                        blackComponents++;
+                        floodFill(i, j, BLACK, visited);
+                    } else if (board[i][j] == WHITE) {
+                        hasWhite = true;
+                        whiteComponents++;
+                        floodFill(i, j, WHITE, visited);
+                    }
                 }
             }
         }
         
-        return componentCount;
+        // Both colors must exist and each must have exactly one component
+        return hasBlack && hasWhite && blackComponents == 1 && whiteComponents == 1;
     }
-    
-    // DFS helper
-    private void dfs(int i, int j, char color, boolean[][] visited) {
-        if (i < 0 || i >= size || j < 0 || j >= size || 
-            visited[i][j] || board[i][j] != color) {
+
+    private void floodFill(int row, int col, char color, boolean[][] visited) {
+        // Check bounds and if cell is unvisited and matches color
+        if (row < 0 || row >= size || col < 0 || col >= size || 
+            visited[row][col] || board[row][col] != color) {
             return;
         }
         
-        visited[i][j] = true;
+        visited[row][col] = true;
         
-        // Check 4 directions
-        dfs(i+1, j, color, visited);
-        dfs(i-1, j, color, visited);
-        dfs(i, j+1, color, visited);
-        dfs(i, j-1, color, visited);
+        // Check four adjacent cells (no diagonals)
+        floodFill(row + 1, col, color, visited);
+        floodFill(row - 1, col, color, visited);
+        floodFill(row, col + 1, color, visited);
+        floodFill(row, col - 1, color, visited);
     }
 
     public int slidingWindow() {

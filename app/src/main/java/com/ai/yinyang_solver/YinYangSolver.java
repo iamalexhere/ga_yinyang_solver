@@ -3,10 +3,12 @@ package com.ai.yinyang_solver;
 public class YinYangSolver {
 
     // Konfigurasi GA
-    private static final int POPULATION_SIZE = 100;
-    private static final int MAX_GENERATIONS = 1000;
+    private static final int POPULATION_SIZE = 200; // Increased
+    private static final int MAX_GENERATIONS = 2000; // Increased
     private static final int MAX_STAGNANT_GENERATIONS = 50;
     private static final double PERFECT_FITNESS = 0.0; // Changed to 0.0 since we want minimum
+    private static final double MUTATION_RATE = 0.2; // Higher mutation rate
+    private static final int TOURNAMENT_SIZE = 7; // Larger tournament size
 
     private final YinYangBoard initialBoard;
     private final YinYangPopulation population;
@@ -16,6 +18,10 @@ public class YinYangSolver {
     private int stagnantGenerations;
     private double bestFitness;
 
+    // Add adaptive parameters
+    private double adaptiveMutationRate;
+    private int stagnantCount;
+
     // Constructor
     public YinYangSolver(char[][] board) {
         this.initialBoard = new YinYangBoard(board);
@@ -24,6 +30,8 @@ public class YinYangSolver {
         this.currentGeneration = 0;
         this.stagnantGenerations = 0;
         this.bestFitness = Double.POSITIVE_INFINITY; // Changed to POSITIVE_INFINITY
+        this.adaptiveMutationRate = 0.1;
+        this.stagnantCount = 0;
     }
 
     // Method utama untuk menjalankan solver
@@ -57,6 +65,9 @@ public class YinYangSolver {
             } else {
                 stagnantGenerations++;
             }
+
+            // Adjust parameters
+            adjustParameters();
 
             // Print progress setiap 10 generasi
             if (currentGeneration % 10 == 0) {
@@ -97,6 +108,15 @@ public class YinYangSolver {
         }
 
         return false;
+    }
+
+    private void adjustParameters() {
+        // Increase mutation rate if stuck
+        if (stagnantGenerations > 20) {
+            adaptiveMutationRate = Math.min(0.4, adaptiveMutationRate + 0.05);
+        } else {
+            adaptiveMutationRate = 0.1;
+        }
     }
 
     // Main method untuk testing

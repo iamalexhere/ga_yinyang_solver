@@ -2,20 +2,25 @@ package com.ai.yinyang_solver;
 
 public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome, Double> {
     
-    // Bobot untuk berbagai aspek fitness
-    private static final double CONNECTIVITY_WEIGHT = 50.0;  // Bobot untuk konektivitas region
-    private static final double CROSSING_PATTERN_WEIGHT = 30.0;  // Bobot untuk pola menyilang
-    private static final double EMPTY_CELL_WEIGHT = 20.0;  // Bobot untuk sel kosong
+    // Adjust weights for better balance
+    private static final double CONNECTIVITY_WEIGHT = 100.0;  // Increased
+    private static final double CROSSING_PATTERN_WEIGHT = 50.0;  // Increased
+    private static final double EMPTY_CELL_WEIGHT = 30.0;  // Increased
+    private static final double REGION_SIZE_WEIGHT = 20.0;  // New weight
     
     @Override
     public Double calculate(YinYangChromosome chromosome) {
         YinYangBoard board = chromosome.getBoard();
         
-        double connectivity = Math.abs(board.isRegionConnected(YinYangBoard.BLACK) - board.isRegionConnected(YinYangBoard.WHITE));
+        double connectivityPenalty = board.isAllRegionsConnected() ? 0 : CONNECTIVITY_WEIGHT;
         int crossPatternCount = board.slidingWindow();
+        int emptyCells = countEmptyCells(board);
+        double regionSizeBalance = calculateRegionSizeBalance(board);
 
-        double fitness = connectivity*CONNECTIVITY_WEIGHT + crossPatternCount*CROSSING_PATTERN_WEIGHT;
-        return fitness;
+        return connectivityPenalty + 
+               crossPatternCount * CROSSING_PATTERN_WEIGHT + 
+               emptyCells * EMPTY_CELL_WEIGHT +
+               regionSizeBalance * REGION_SIZE_WEIGHT;
     }
     
     // Hitung jumlah sel kosong
@@ -32,6 +37,21 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
         }
         
         return count;
+    }
+    
+    private double calculateRegionSizeBalance(YinYangBoard board) {
+        // Calculate difference between black and white region sizes
+        int blackCount = 0, whiteCount = 0;
+        int size = board.getSize();
+        
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(board.getCell(i,j) == YinYangBoard.BLACK) blackCount++;
+                else if(board.getCell(i,j) == YinYangBoard.WHITE) whiteCount++;
+            }
+        }
+        
+        return Math.abs(blackCount - whiteCount) / (double)(size * size);
     }
     
     // Method untuk mendapatkan deskripsi detail fitness
