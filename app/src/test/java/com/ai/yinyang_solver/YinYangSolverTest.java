@@ -20,7 +20,7 @@ public class YinYangSolverTest {
         
         // Verify solution properties
         assertTrue(solution.isAllRegionsConnected());
-        assertEquals(0, solution.countCrossingPatterns());
+        assertEquals(0, solution.slidingWindow());
     }
     
     @Test
@@ -38,7 +38,7 @@ public class YinYangSolverTest {
         
         // Verify solution properties
         assertTrue(solution.isAllRegionsConnected());
-        assertEquals(0, solution.countCrossingPatterns());
+        assertEquals(0, solution.slidingWindow());
     }
     
     @Test
@@ -55,7 +55,7 @@ public class YinYangSolverTest {
         
         // Verify that solution follows basic rules
         assertTrue(solution.isAllRegionsConnected());
-        assertEquals(0, solution.countCrossingPatterns());
+        assertEquals(0, solution.slidingWindow());
     }
     
     @Test
@@ -85,7 +85,7 @@ public class YinYangSolverTest {
 
         // Verify solution properties
         assertTrue("All regions should be connected", solution.isAllRegionsConnected());
-        assertEquals("Should not have crossing patterns", 0, solution.countCrossingPatterns());
+        assertEquals("Should not have crossing patterns", 0, solution.slidingWindow());
 
         // Verify that fixed cells from initial board are maintained
         assertEquals('B', solution.getCell(0, 3));  // Fixed B in initial board
@@ -144,7 +144,7 @@ public class YinYangSolverTest {
         assertTrue("White region should be connected", isRegionConnected(solution, 'W'));
 
         // 3. Check for no crossing patterns
-        assertEquals("Should not have crossing patterns", 0, solution.countCrossingPatterns());
+        assertEquals("Should not have crossing patterns", 0, solution.slidingWindow());
     }
 
     private boolean isRegionConnected(YinYangBoard board, char color) {

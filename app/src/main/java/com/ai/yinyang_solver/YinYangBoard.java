@@ -52,13 +52,17 @@ public class YinYangBoard {
     
     // Cek apakah semua region terhubung
     public boolean isAllRegionsConnected() {
-        return isRegionConnected(BLACK) && isRegionConnected(WHITE);
+        if(Math.abs(isRegionConnected(BLACK) - isRegionConnected(WHITE)) == 0) {
+            return true;
+        }
+        return false;
     }
     
     // Helper method untuk cek konektivitas satu warna
-    private boolean isRegionConnected(char color) {
+    protected int isRegionConnected(char color) {
         // Temporary array untuk marking
         boolean[][] visited = new boolean[size][size];
+        int componentCount = 1;
         
         // Cari sel pertama dengan warna yang dicari
         int startI = -1, startJ = -1;
@@ -73,7 +77,7 @@ public class YinYangBoard {
         }
         
         // Jika tidak ada sel dengan warna tersebut
-        if (startI == -1) return true;
+        if (startI == -1) return 0;
         
         // DFS dari sel pertama
         dfs(startI, startJ, color, visited);
@@ -82,12 +86,13 @@ public class YinYangBoard {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (board[i][j] == color && !visited[i][j]) {
-                    return false;
+                    dfs(i, j, color, visited);
+                    componentCount++;
                 }
             }
         }
         
-        return true;
+        return componentCount;
     }
     
     // DFS helper
@@ -105,31 +110,56 @@ public class YinYangBoard {
         dfs(i, j+1, color, visited);
         dfs(i, j-1, color, visited);
     }
-    
-    // Cek pola menyilang dalam kotak 2x2
-    public int countCrossingPatterns() {
-        int count = 0;
-        for (int i = 0; i < size-1; i++) {
-            for (int j = 0; j < size-1; j++) {
-                if (isCrossingPattern(i, j)) {
-                    count++;
+
+    public int slidingWindow() {
+        int crossCount = 0;
+
+        for(int i = 1;i < size-1;i++) {
+            for(int j = 1;j < size-1;j++) {
+                if(isColorCross(i, j)) {
+                    crossCount += 1;
                 }
             }
         }
-        return count;
+
+        return crossCount;
+    }
+
+    private boolean isColorCross(int i, int j) {
+        char topLeft = board[i - 1][j - 1];
+        char topRight = board[i - 1][j];
+        char bottomLeft = board[i][j-1];
+        char bottomRight = board[i][j];
+
+        return (topLeft == 'B' && topRight == 'W' && bottomLeft == 'W' && bottomRight == 'B') || (topLeft == 'W' && topRight == 'B' && bottomLeft == 'B' && bottomRight == 'W');
     }
     
-    // Helper untuk cek pola menyilang dalam kotak 2x2
-    private boolean isCrossingPattern(int i, int j) {
-        // Cek apakah membentuk pola menyilang B W
-        //                                    W B
-        // atau                              W B
-        //                                   B W
-        return (board[i][j] == BLACK && board[i+1][j+1] == BLACK &&
-                board[i][j+1] == WHITE && board[i+1][j] == WHITE) ||
-               (board[i][j] == WHITE && board[i+1][j+1] == WHITE &&
-                board[i][j+1] == BLACK && board[i+1][j] == BLACK);
-    }
+    // Cek pola menyilang dalam kotak 2x2
+    // public int countCrossingPatterns() {
+    //     int count = 0;
+    //     for (int i = 0; i < size-1; i++) {
+    //         for (int j = 0; j < size-1; j++) {
+    //             if (isCrossingPattern(i, j)) {
+    //                 count++;
+    //             }
+    //         }
+    //     }
+    //     return count;
+    // }
+    
+    // // Helper untuk cek pola menyilang dalam kotak 2x2
+    // private boolean isCrossingPattern(int i, int j) {
+    //     // Cek apakah membentuk pola menyilang B W
+    //     //                                    W B
+    //     // atau                              W B
+    //     //                                   B W
+    //     return (board[i][j] == BLACK && board[i+1][j+1] == BLACK &&
+    //             board[i][j+1] == WHITE && board[i+1][j] == WHITE) ||
+    //            (board[i][j] == WHITE && board[i+1][j+1] == WHITE &&
+    //             board[i][j+1] == BLACK && board[i+1][j] == BLACK);
+    // }
+
+
     
     // Getter dan setter
     public char getCell(int i, int j) {

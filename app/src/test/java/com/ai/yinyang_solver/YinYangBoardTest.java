@@ -42,7 +42,7 @@ public class YinYangBoardTest {
     }
     
     @Test
-    public void testCountCrossingPatterns() {
+    public void testSlidingWindow() {
         // Test case with crossing pattern
         char[][] crossingBoard = {
             {'B', 'W', '0'},
@@ -50,7 +50,7 @@ public class YinYangBoardTest {
             {'0', '0', '0'}
         };
         YinYangBoard board = new YinYangBoard(crossingBoard);
-        assertEquals(1, board.countCrossingPatterns());
+        assertEquals(1, board.slidingWindow());
         
         // Test case without crossing pattern
         char[][] noCrossingBoard = {
@@ -59,7 +59,7 @@ public class YinYangBoardTest {
             {'W', 'W', 'W'}
         };
         YinYangBoard board2 = new YinYangBoard(noCrossingBoard);
-        assertEquals(0, board2.countCrossingPatterns());
+        assertEquals(0, board2.slidingWindow());
     }
     
     @Test

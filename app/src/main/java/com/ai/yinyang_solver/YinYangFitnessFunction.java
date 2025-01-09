@@ -6,29 +6,16 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
     private static final double CONNECTIVITY_WEIGHT = 50.0;  // Bobot untuk konektivitas region
     private static final double CROSSING_PATTERN_WEIGHT = 30.0;  // Bobot untuk pola menyilang
     private static final double EMPTY_CELL_WEIGHT = 20.0;  // Bobot untuk sel kosong
-    private int width;
-    private int height;
     
     @Override
     public Double calculate(YinYangChromosome chromosome) {
         YinYangBoard board = chromosome.getBoard();
-        double score = 100.0;  // Nilai awal maksimum
         
-        // 1. Penalti untuk region yang tidak terhubung
-        if (!board.isAllRegionsConnected()) {
-            score -= CONNECTIVITY_WEIGHT;
-        }
-        
-        // 2. Penalti untuk pola menyilang dalam kotak 2x2
-        int crossingPatterns = board.countCrossingPatterns();
-        score -= crossingPatterns * CROSSING_PATTERN_WEIGHT;
-        
-        // 3. Penalti untuk sel yang masih kosong
-        int emptyCells = countEmptyCells(board);
-        score -= emptyCells * EMPTY_CELL_WEIGHT;
-        
-        // Pastikan score tidak negatif
-        return Math.max(0.0, score);
+        double connectivity = Math.abs(board.isRegionConnected(YinYangBoard.BLACK) - board.isRegionConnected(YinYangBoard.WHITE));
+        int crossPatternCount = board.slidingWindow();
+
+        double fitness = connectivity*CONNECTIVITY_WEIGHT + crossPatternCount*CROSSING_PATTERN_WEIGHT;
+        return fitness;
     }
     
     // Hitung jumlah sel kosong
@@ -58,7 +45,7 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
                   .append(" (").append(connected ? 0 : -CONNECTIVITY_WEIGHT).append(" points)\n");
         
         // Cek pola menyilang
-        int crossingPatterns = board.countCrossingPatterns();
+        int crossingPatterns = board.slidingWindow();
         description.append("Crossing Patterns: ").append(crossingPatterns)
                   .append(" (").append(-crossingPatterns * CROSSING_PATTERN_WEIGHT).append(" points)\n");
         
@@ -79,52 +66,47 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
         return calculate(chromosome) >= 99.9;  // Menggunakan threshold untuk floating point
     }
 
-    public YinYangFitnessFunction(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
-
     public YinYangFitnessFunction() {
         
     }
 
-    private int[] countComponentsForEachColor(char[] board) {
-        boolean[] visited = new boolean[board.length];
-        int blackComponents = 0;
-        int whiteComponents = 0;
+    // private int[] countComponentsForEachColor(char[] board) {
+    //     boolean[] visited = new boolean[board.length];
+    //     int blackComponents = 0;
+    //     int whiteComponents = 0;
 
-        for(int i = 0;i < board.length;i++) {
-            if(!visited[i]) {
-                if(board[i] == '1' || board[i] == '3') {
-                    dfs(i, board, visited, board[i]);
-                    blackComponents += 1;
-                }else{
-                    dfs(i, board, visited, board[i]);
-                    whiteComponents += 1;
-                }
-            }
-        }
+    //     for(int i = 0;i < board.length;i++) {
+    //         if(!visited[i]) {
+    //             if(board[i] == '1' || board[i] == '3') {
+    //                 dfs(i, board, visited, board[i]);
+    //                 blackComponents += 1;
+    //             }else{
+    //                 dfs(i, board, visited, board[i]);
+    //                 whiteComponents += 1;
+    //             }
+    //         }
+    //     }
 
-        int[] result = new int[2];
-        result[0] = blackComponents;
-        result[1] = whiteComponents;
+    //     int[] result = new int[2];
+    //     result[0] = blackComponents;
+    //     result[1] = whiteComponents;
 
-        return result;
-    }
+    //     return result;
+    // }
 
-    private void dfs(int idx, char[] board, boolean[] visited, char target) {
-        if(idx < 0 || idx >= board.length || visited[idx] || board[idx] != target) {
-            return;
-        }
+    // private void dfs(int idx, char[] board, boolean[] visited, char target) {
+    //     if(idx < 0 || idx >= board.length || visited[idx] || board[idx] != target) {
+    //         return;
+    //     }
 
-        visited[idx] = true;
+    //     visited[idx] = true;
 
-        int row = idx / width;
-        int col = idx % width;
+    //     int row = idx / width;
+    //     int col = idx % width;
 
-        if(row > 0) dfs(idx-width, board, visited, target);
-        if(row < height - 1) dfs(idx+width, board, visited, target);
-        if(col > 0) dfs(idx-1, board, visited, target);
-        if(col < width - 1) dfs(idx+1, board, visited, target);
-    }
+    //     if(row > 0) dfs(idx-width, board, visited, target);
+    //     if(row < height - 1) dfs(idx+width, board, visited, target);
+    //     if(col > 0) dfs(idx-1, board, visited, target);
+    //     if(col < width - 1) dfs(idx+1, board, visited, target);
+    // }
 }
