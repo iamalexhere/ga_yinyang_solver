@@ -84,6 +84,10 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
         this.height = height;
     }
 
+    public YinYangFitnessFunction() {
+        
+    }
+
     private int[] countComponentsForEachColor(char[] board) {
         boolean[] visited = new boolean[board.length];
         int blackComponents = 0;
@@ -108,10 +112,6 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
         return result;
     }
 
-    private int checkTwoByTwo() {
-
-    }
-
     private void dfs(int idx, char[] board, boolean[] visited, char target) {
         if(idx < 0 || idx >= board.length || visited[idx] || board[idx] != target) {
             return;
@@ -126,9 +126,5 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
         if(row < height - 1) dfs(idx+width, board, visited, target);
         if(col > 0) dfs(idx-1, board, visited, target);
         if(col < width - 1) dfs(idx+1, board, visited, target);
-    }
-
-    private void slidingWindow() {
-
     }
 }
