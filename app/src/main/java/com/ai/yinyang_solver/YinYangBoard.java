@@ -83,29 +83,21 @@ public class YinYangBoard {
         
         // Jika tidak ada sel dengan warna tersebut
         if (startI == -1) return 0;
-        
-        // Create visited array
-        boolean[][] visited = new boolean[size][size]; // Membuat array untuk menandai sel yang sudah dikunjungi
+
+        floodFill(startI, startJ, color, visited);
         
         // Count connected components for each color
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (!visited[i][j]) { // Jika sel belum dikunjungi
-                    if (board[i][j] == BLACK) { // Jika sel berwarna hitam
-                        hasBlack = true; // Set flag bahwa ada komponen hitam
-                        blackComponents++; // Increment jumlah komponen hitam
-                        floodFill(i, j, BLACK, visited); // Lakukan flood fill untuk menandai semua sel hitam yang terhubung
-                    } else if (board[i][j] == WHITE) { // Jika sel berwarna putih
-                        hasWhite = true; // Set flag bahwa ada komponen putih
-                        whiteComponents++; // Increment jumlah komponen putih
-                        floodFill(i, j, WHITE, visited); // Lakukan flood fill untuk menandai semua sel putih yang terhubung
-                    }
+                if (board[i][j] == color && !visited[i][j]) { 
+                    componentCount += 1;
+                    floodFill(i, j, color, visited); // Lakukan flood fill untuk menandai semua sel hitam yang terhubung
                 }
             }
         }
         
         // Both colors must exist and each must have exactly one component
-        return hasBlack && hasWhite && blackComponents == 1 && whiteComponents == 1; // Memastikan kedua warna ada dan masing-masing hanya memiliki satu komponen
+        return componentCount; // Memastikan kedua warna ada dan masing-masing hanya memiliki satu komponen
     }
 
     // Implementasi algoritma flood fill untuk menandai semua sel yang terhubung
