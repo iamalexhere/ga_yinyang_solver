@@ -34,5 +34,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("com.ai.yinyang_solver.YinYangSolver")
+    mainClass.set("com.ai.yinyang_solver.App")
 }

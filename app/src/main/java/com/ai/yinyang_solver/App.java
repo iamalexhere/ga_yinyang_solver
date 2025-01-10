@@ -9,6 +9,28 @@ public class App {
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        //int size = 6;
+        char[][] initialBoardConfig = {
+            {'0', '0', '0', '0', '0', '0'},
+            {'0', '0', 'B', '0', '0', '0'},
+            {'0', 'W', '0', 'B', 'W', '0'},
+            {'0', 'W', 'W', 'W', '0', '0'},
+            {'0', 'W', '0', '0', 'W', '0'},
+            {'0', '0', 'B', '0', '0', 'B'},
+        };
+        YinYangBoard initialBoard = new YinYangBoard(initialBoardConfig);
+        
+        int populationSize = 1000;
+        int maxIterations = 10000;
+        double mutationRate = 0.1;
+        int eliteCount = 10;
+        int reinitializeCount = 5;
+        int tournamentSize = 5;
+
+        YinYangSolver solver = new YinYangSolver(initialBoard, populationSize, maxIterations, mutationRate, eliteCount, reinitializeCount, tournamentSize);
+        YinYangChromosome solution = solver.solve();
+
+        System.out.println("Solution:");
+        System.out.println(solution.toString());
     }
 }
