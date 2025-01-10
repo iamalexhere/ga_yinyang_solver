@@ -57,11 +57,32 @@ public class YinYangBoard {
     
     // Cek apakah semua region terhubung
     public boolean isAllRegionsConnected() {
-        // Count the components of each color
-        int blackComponents = 0; // Inisialisasi jumlah komponen hitam
-        int whiteComponents = 0; // Inisialisasi jumlah komponen putih
-        boolean hasBlack = false; // Flag untuk menandakan apakah ada komponen hitam
-        boolean hasWhite = false; // Flag untuk menandakan apakah ada komponen putih
+        if(countConnectedComponents(BLACK) == 1 && countConnectedComponents(WHITE) == 1) {
+            return true;
+        }
+        return false;
+    }
+    
+    // Helper method untuk cek konektivitas satu warna
+    protected int countConnectedComponents(char color) {
+        // Temporary array untuk marking
+        boolean[][] visited = new boolean[size][size];
+        int componentCount = 1;
+        
+        // Cari sel pertama dengan warna yang dicari
+        int startI = -1, startJ = -1;
+        for (int i = 0; i < size && startI == -1; i++) {
+            for (int j = 0; j < size; j++) {
+                if (board[i][j] == color) {
+                    startI = i;
+                    startJ = j;
+                    break;
+                }
+            }
+        }
+        
+        // Jika tidak ada sel dengan warna tersebut
+        if (startI == -1) return 0;
         
         // Create visited array
         boolean[][] visited = new boolean[size][size]; // Membuat array untuk menandai sel yang sudah dikunjungi

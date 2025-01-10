@@ -11,20 +11,15 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
     
     @Override
     public Double calculate(YinYangChromosome chromosome) {
-        YinYangBoard board = chromosome.getBoard(); // Mendapatkan board dari kromosom
-        
-        // If any critical criteria fails, return high penalty
-        if (!board.isAllRegionsConnected() ||  // Jika region tidak terhubung
-            board.slidingWindow() > 0 ||  // Jika ada pola menyilang
-            countEmptyCells(board) > 0) { // Jika ada sel kosong
-            // Mengembalikan penalti tinggi jika salah satu kriteria utama gagal
-            return CONNECTIVITY_WEIGHT * (!board.isAllRegionsConnected() ? 1 : 0) + // Penalti konektivitas
-                   CROSSING_PATTERN_WEIGHT * board.slidingWindow() + // Penalti pola menyilang
-                   EMPTY_CELL_WEIGHT * countEmptyCells(board); // Penalti sel kosong
-        }
-        
-        // If all critical criteria pass, only consider region balance with reduced weight
-        return calculateRegionSizeBalance(board) * REGION_SIZE_WEIGHT; // Jika semua kriteria utama terpenuhi, hanya hitung keseimbangan region
+        YinYangBoard board = chromosome.getBoard();
+        int white = board.countConnectedComponents(YinYangBoard.WHITE)*(board.countConnectedComponents(YinYangBoard.WHITE)-1);
+        int black = board.countConnectedComponents(YinYangBoard.BLACK)*(board.countConnectedComponents(YinYangBoard.BLACK)-1);
+         
+        double connectivity = white + black;
+        int crossPatternCount = board.slidingWindow();
+
+        double fitness = connectivity*CONNECTIVITY_WEIGHT + crossPatternCount*CROSSING_PATTERN_WEIGHT;
+        return fitness;
     }
     
     // Hitung jumlah sel kosong

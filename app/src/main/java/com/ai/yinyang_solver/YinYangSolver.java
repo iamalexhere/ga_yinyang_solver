@@ -9,16 +9,11 @@ import java.util.Random;
  * yang memiliki lebih dari setengah simbol yang sama, dan tidak ada tiga simbol berurutan yang sama secara horizontal atau vertikal.
  */
 public class YinYangSolver {
-    // Parameter yang disesuaikan untuk meningkatkan kinerja dan stabilitas algoritma.
-    private static final int POPULATION_SIZE = 600; // Ukuran populasi ditingkatkan untuk mengeksplorasi lebih banyak solusi potensial.
-    private static final int MAX_GENERATIONS = 3000; // Jumlah maksimum generasi ditingkatkan untuk memberikan waktu evolusi yang lebih lama.
-    private static final int MAX_STAGNANT_GENERATIONS = 50; // Jumlah maksimum generasi stagnan dikurangi untuk mempercepat restart jika tidak ada kemajuan.
-    private static final double PERFECT_FITNESS = 0.1; // Ambang batas fitness sempurna dilonggarkan untuk memungkinkan konvergensi yang lebih cepat.
-    private static final double MUTATION_RATE = 0.3; // Tingkat mutasi ditingkatkan untuk menambah variasi genetik dalam populasi.
-    private static final int TOURNAMENT_SIZE = 5; // Ukuran turnamen ditingkatkan untuk seleksi yang lebih kompetitif.
-    private static final int ELITE_COUNT = 8; // Jumlah individu elit digandakan untuk mempertahankan solusi terbaik.
-    private static final int LOCAL_SEARCH_ITERATIONS = 400; // Jumlah iterasi pencarian lokal ditingkatkan untuk penyempurnaan solusi yang lebih intensif.
-    private static final double CROSSOVER_RATE = 0.8; // Tingkat crossover ditambahkan untuk memungkinkan pertukaran informasi genetik antar individu.
+    // Konfigurasi GA
+    private static final int POPULATION_SIZE = 100;
+    private static final int MAX_GENERATIONS = 1000;
+    private static final int MAX_STAGNANT_GENERATIONS = 50;
+    private static final double PERFECT_FITNESS = 0.99;
 
     private final YinYangBoard initialBoard;
     private final YinYangPopulation population;
