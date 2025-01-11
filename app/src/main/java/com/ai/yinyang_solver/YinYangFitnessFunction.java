@@ -4,8 +4,9 @@ package com.ai.yinyang_solver;
 public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome, Double> {
     
     // Adjust weights for better balance
-    private static final double CONNECTIVITY_WEIGHT = 100.0;
-    private static final double CROSSING_PATTERN_WEIGHT = 25.0;
+    private static final double CONNECTIVITY_WEIGHT = 120.0;
+    private static final double CROSSING_PATTERN_WEIGHT = 50.0;
+    private static final double MONO_COLOR__WEIGHT = 300.0;
     private static final double EMPTY_CELL_WEIGHT = 15.0;
     private static final double REGION_SIZE_WEIGHT = 5.0;
     
@@ -16,9 +17,10 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
         int black = board.countConnectedComponents(YinYangBoard.BLACK)*(board.countConnectedComponents(YinYangBoard.BLACK)-1);
          
         double connectivity = white + black;
-        int crossPatternCount = board.slidingWindow();
+        int crossPatternCount = board.slidingWindowForColorCross();
+        int monoColorCount = board.slidingWindowForMonoColor();
 
-        double fitness = connectivity*CONNECTIVITY_WEIGHT + crossPatternCount*CROSSING_PATTERN_WEIGHT;
+        double fitness = connectivity*CONNECTIVITY_WEIGHT + crossPatternCount*CROSSING_PATTERN_WEIGHT + monoColorCount*MONO_COLOR__WEIGHT;
         return fitness;
     }
     
@@ -67,7 +69,7 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
                   .append(" (").append(-connectivityPenalty).append(" points)\n"); // Menambahkan penalti konektivitas ke deskripsi
         
         // Cek pola menyilang
-        int crossingPatterns = board.slidingWindow(); // Menghitung jumlah pola menyilang
+        int crossingPatterns = board.slidingWindowForColorCross(); // Menghitung jumlah pola menyilang
         double crossingPenalty = crossingPatterns * CROSSING_PATTERN_WEIGHT; // Menghitung penalti pola menyilang
         description.append("2. Crossing Patterns: ").append(crossingPatterns) // Menambahkan jumlah pola menyilang ke deskripsi
                   .append(" (").append(-crossingPenalty).append(" points)\n"); // Menambahkan penalti pola menyilang ke deskripsi

@@ -118,12 +118,12 @@ public class YinYangBoard {
     }
 
     // Implementasi sliding window untuk menghitung pola menyilang
-    public int slidingWindow() {
+    public int slidingWindowForColorCross() {
         int crossCount = 0; // Inisialisasi jumlah pola menyilang
         
         // Check each possible 2x2 window
-        for(int i = 0; i < size - 1; i++) { // Iterasi baris
-            for(int j = 0; j < size - 1; j++) { // Iterasi kolom
+        for(int i = 1; i < size - 1; i++) { // Iterasi baris
+            for(int j = 1; j < size - 1; j++) { // Iterasi kolom
                 if(isColorCross(i, j)) { // Jika ditemukan pola menyilang
                     crossCount++; // Increment jumlah pola menyilang
                 }
@@ -132,20 +132,41 @@ public class YinYangBoard {
         return crossCount; // Mengembalikan jumlah pola menyilang
     }
 
+    public int slidingWindowForMonoColor() {
+        int monoColorCount = 0; // Inisialisasi jumlah pola menyilang
+        
+        // Check each possible 2x2 window
+        for(int i = 1; i < size - 1; i++) { // Iterasi baris
+            for(int j = 1; j < size - 1; j++) { // Iterasi kolom
+                if(isMonoColor(i, j)) { // Jika ditemukan pola menyilang
+                    monoColorCount++; // Increment jumlah pola menyilang
+                }
+            }
+        }
+        return monoColorCount; // Mengembalikan jumlah pola menyilang
+    }
+
     // Helper method untuk cek pola menyilang dalam kotak 2x2
     private boolean isColorCross(int i, int j) {
-        // Validate window bounds
-        if(i + 1 >= size || j + 1 >= size) return false; // Jika window di luar batas, return false
-        
-        char topLeft = board[i][j]; // Mendapatkan nilai sel kiri atas
-        char topRight = board[i][j + 1]; // Mendapatkan nilai sel kanan atas
-        char bottomLeft = board[i + 1][j]; // Mendapatkan nilai sel kiri bawah
-        char bottomRight = board[i + 1][j + 1]; // Mendapatkan nilai sel kanan bawah
+        char topLeft = board[i-1][j-1]; // Mendapatkan nilai sel kiri atas
+        char topRight = board[i-1][j]; // Mendapatkan nilai sel kanan atas
+        char bottomLeft = board[i][j-1]; // Mendapatkan nilai sel kiri bawah
+        char bottomRight = board[i][j]; // Mendapatkan nilai sel kanan bawah
 
         // Cek apakah membentuk pola menyilang B W atau W B
         //                                    W B      B W
         return (topLeft == BLACK && topRight == WHITE && bottomLeft == WHITE && bottomRight == BLACK) ||
                (topLeft == WHITE && topRight == BLACK && bottomLeft == BLACK && bottomRight == WHITE);
+    }
+
+    private boolean isMonoColor(int i, int j) {
+        char topLeft = board[i-1][j-1]; // Mendapatkan nilai sel kiri atas
+        char topRight = board[i-1][j]; // Mendapatkan nilai sel kanan atas
+        char bottomLeft = board[i][j-1]; // Mendapatkan nilai sel kiri bawah
+        char bottomRight = board[i][j]; // Mendapatkan nilai sel kanan bawah
+
+        return (topLeft == BLACK && topRight == BLACK && bottomLeft == BLACK && bottomRight == BLACK) ||
+               (topLeft == WHITE && topRight == WHITE && bottomLeft == WHITE && bottomRight == WHITE);
     }
      
     // Cek pola menyilang dalam kotak 2x2

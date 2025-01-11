@@ -4,11 +4,22 @@
 package com.ai.yinyang_solver;
 
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
-
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        char[][] initialBoard = {
+            {'0', '0', '0', 'B', '0', 'W'},
+            {'0', '0', 'B', '0', 'B', '0'},
+            {'0', '0', 'W', '0', '0', '0'},
+            {'B', '0', '0', '0', 'W', '0'},
+            {'0', 'B', '0', 'B', '0', '0'},
+            {'W', '0', '0', '0', '0', '0'}
+        };
+
+        YinYangSolver solver = new YinYangSolver(initialBoard);
+        YinYangBoard solution = solver.solve();
+
+        System.out.println("\nInitial Board:");
+        System.out.println(new YinYangBoard(initialBoard).toString());
+        System.out.println("\nFinal Solution:");
+        System.out.println(solution.toString());
     }
 }

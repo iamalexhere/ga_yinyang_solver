@@ -1,19 +1,174 @@
+// package com.ai.yinyang_solver;
+
+// import java.util.List;
+// import java.util.Random;
+
+// /**
+//  * Kelas {@code YinYangSolver} mengimplementasikan algoritma genetika untuk menyelesaikan puzzle Yin Yang.
+//  * Puzzle ini melibatkan pengisian papan dengan simbol 'B' dan 'W' sedemikian rupa sehingga tidak ada baris atau kolom
+//  * yang memiliki lebih dari setengah simbol yang sama, dan tidak ada tiga simbol berurutan yang sama secara horizontal atau vertikal.
+//  */
+// public class YinYangSolver {
+//     // Konfigurasi GA
+//     private static final int POPULATION_SIZE = 100;
+//     private static final int MAX_GENERATIONS = 1000;
+//     private static final int MAX_STAGNANT_GENERATIONS = 50;
+//     private static final double PERFECT_FITNESS = 0.99;
+
+//     private final YinYangBoard initialBoard;
+//     private final YinYangPopulation population;
+//     private final YinYangFitnessFunction fitnessFunction;
+//     private final Random random;
+
+//     private int currentGeneration;
+//     private int stagnantGenerations;
+//     private double bestFitness;
+//     private YinYangChromosome bestSolution;
+
+//     /**
+//      * Konstruktor untuk membuat instance {@code YinYangSolver}.
+//      *
+//      * @param board Papan Yin Yang awal yang akan diselesaikan.
+//      */
+//     public YinYangSolver(char[][] board) {
+//         this.initialBoard = new YinYangBoard(board);
+//         this.fitnessFunction = new YinYangFitnessFunction();
+//         this.population = new YinYangPopulation(fitnessFunction);
+//         this.random = new Random();
+//         this.currentGeneration = 0;
+//         this.stagnantGenerations = 0;
+//         this.bestFitness = Double.POSITIVE_INFINITY;
+//         this.bestSolution = null;
+//     }
+
+//     /**
+//      * Metode utama untuk memulai dan menjalankan algoritma genetika untuk menyelesaikan puzzle Yin Yang.
+//      *
+//      * @return Papan {@code YinYangBoard} yang merupakan solusi terbaik yang ditemukan.
+//      */
+//     public YinYangBoard solve() {
+//         population.initializePopulation(initialBoard, POPULATION_SIZE);
+//         int restartCount = 0;
+
+//         while (!shouldTerminate()) {
+//             // Mendapatkan daftar kromosom elit dari populasi saat ini.
+//             List<YinYangChromosome> elite = population.getTopChromosomes(ELITE_COUNT);
+
+//             // Menerapkan evolusi pada populasi.
+//             population.evolve(MUTATION_RATE);
+//             applyCrossover(); // Menerapkan crossover untuk menghasilkan individu baru.
+//             population.replaceWorstWithElite(elite); // Mengganti individu terburuk dengan individu elit.
+
+//             // Mendapatkan kromosom terbaik dari populasi saat ini.
+//             YinYangChromosome best = population.getBestChromosome();
+
+//             updateStats(); // Memperbarui statistik generasi dan fitness terbaik.
+
+//             // Memulai ulang populasi jika algoritma terjebak dan jumlah restart belum mencapai batas.
+//             if (stagnantGenerations > MAX_STAGNANT_GENERATIONS / 2 && restartCount < 3) {
+//                 population.reinitializePopulation(initialBoard, POPULATION_SIZE);
+//                 stagnantGenerations = 0;
+//                 restartCount++;
+//             }
+
+//             currentGeneration++;
+//         }
+
+//         // Mengembalikan papan dari solusi terbaik yang ditemukan, atau dari kromosom terbaik jika tidak ada solusi yang ditemukan.
+//         return bestSolution != null ? bestSolution.getBoard() : population.getBestChromosome().getBoard();
+//     }
+
+//     /**
+//      * Menerapkan operasi crossover pada populasi untuk menghasilkan variasi genetik baru.
+//      * Metode ini memilih dua induk melalui seleksi turnamen dan melakukan crossover dengan probabilitas tertentu.
+//      */
+//     private void applyCrossover() {
+//         for (int i = 0; i < POPULATION_SIZE / 2; i++) {
+//             if (random.nextDouble() < CROSSOVER_RATE) {
+//                 // Memilih dua induk melalui seleksi turnamen.
+//                 YinYangChromosome parent1 = population.selectByTournament(TOURNAMENT_SIZE);
+//                 YinYangChromosome parent2 = population.selectByTournament(TOURNAMENT_SIZE);
+//                 population.crossover(parent1, parent2); // Menerapkan crossover pada induk yang dipilih.
+//             }
+//         }
+//     }
+
+//     /**
+//      * Menentukan apakah algoritma harus berhenti berdasarkan kondisi terminasi.
+//      * Kondisi terminasi meliputi mencapai fitness sempurna, mencapai jumlah generasi maksimum, atau stagnasi evolusi.
+//      *
+//      * @return {@code true} jika algoritma harus berhenti, {@code false} jika tidak.
+//      */
+//     private boolean shouldTerminate() {
+//         return bestFitness <= PERFECT_FITNESS ||
+//                currentGeneration >= MAX_GENERATIONS ||
+//                stagnantGenerations >= MAX_STAGNANT_GENERATIONS;
+//     }
+
+//     /**
+//      * Memperbarui statistik evolusi seperti fitness terbaik dan jumlah generasi stagnan.
+//      * Jika fitness saat ini lebih baik dari fitness terbaik sebelumnya, statistik diperbarui.
+//      * Jika tidak ada peningkatan dalam beberapa generasi, jumlah generasi stagnan bertambah.
+//      */
+//     private void updateStats() {
+//         YinYangChromosome currentBest = population.getBestChromosome();
+//         double currentFitness = fitnessFunction.calculate(currentBest);
+
+//         if (currentFitness < bestFitness) {
+//             bestFitness = currentFitness;
+//             bestSolution = currentBest.clone();
+//             stagnantGenerations = 0;
+//         } else {
+//             stagnantGenerations++;
+//         }
+
+//         // Secara periodik melakukan reinitialisasi pada individu terburuk jika algoritma terjebak.
+//         if (stagnantGenerations > 20) {
+//             population.reinitializeWorstIndividuals(POPULATION_SIZE / 10);
+//         }
+//     }
+
+//     /**
+//      * Metode utama untuk menjalankan {@code YinYangSolver} sebagai aplikasi konsol.
+//      * Metode ini membuat papan awal, menjalankan solver, dan mencetak papan awal dan solusi.
+//      *
+//      * @param args Argumen baris perintah (tidak digunakan).
+//      */
+//     public static void main(String[] args) {
+//         // Contoh papan 6x6 untuk dipecahkan.
+//         char[][] initialBoard = {
+//             {'0', '0', '0', 'B', '0', 'W'},
+//             {'0', '0', 'B', '0', 'B', '0'},
+//             {'0', '0', 'W', '0', '0', '0'},
+//             {'B', '0', '0', '0', 'W', '0'},
+//             {'0', 'B', '0', 'B', '0', '0'},
+//             {'W', '0', '0', '0', '0', '0'}
+//         };
+
+//         YinYangSolver solver = new YinYangSolver(initialBoard);
+//         YinYangBoard solution = solver.solve();
+
+//         System.out.println("\nPapan Awal:");
+//         System.out.println(new YinYangBoard(initialBoard).toString());
+//         System.out.println("\nSolusi Akhir:");
+//         System.out.println(solution.toString());
+//     }
+// }
+
 package com.ai.yinyang_solver;
 
-import java.util.List;
 import java.util.Random;
 
 /**
- * Kelas {@code YinYangSolver} mengimplementasikan algoritma genetika untuk menyelesaikan puzzle Yin Yang.
- * Puzzle ini melibatkan pengisian papan dengan simbol 'B' dan 'W' sedemikian rupa sehingga tidak ada baris atau kolom
- * yang memiliki lebih dari setengah simbol yang sama, dan tidak ada tiga simbol berurutan yang sama secara horizontal atau vertikal.
+ * Class {@code YinYangSolver} implements a genetic algorithm to solve the Yin Yang puzzle.
  */
 public class YinYangSolver {
-    // Konfigurasi GA
-    private static final int POPULATION_SIZE = 100;
-    private static final int MAX_GENERATIONS = 1000;
-    private static final int MAX_STAGNANT_GENERATIONS = 50;
+    private static final int POPULATION_SIZE = 200;
+    private static final int MAX_GENERATIONS = 20;
+    private static final int MAX_STAGNANT_GENERATIONS = 3;
     private static final double PERFECT_FITNESS = 0.99;
+    private static final double MUTATION_RATE = 0.7;
+    private static final double CROSSOVER_RATE = 0.5;
 
     private final YinYangBoard initialBoard;
     private final YinYangPopulation population;
@@ -25,11 +180,6 @@ public class YinYangSolver {
     private double bestFitness;
     private YinYangChromosome bestSolution;
 
-    /**
-     * Konstruktor untuk membuat instance {@code YinYangSolver}.
-     *
-     * @param board Papan Yin Yang awal yang akan diselesaikan.
-     */
     public YinYangSolver(char[][] board) {
         this.initialBoard = new YinYangBoard(board);
         this.fitnessFunction = new YinYangFitnessFunction();
@@ -41,115 +191,39 @@ public class YinYangSolver {
         this.bestSolution = null;
     }
 
-    /**
-     * Metode utama untuk memulai dan menjalankan algoritma genetika untuk menyelesaikan puzzle Yin Yang.
-     *
-     * @return Papan {@code YinYangBoard} yang merupakan solusi terbaik yang ditemukan.
-     */
     public YinYangBoard solve() {
-        population.initializePopulation(initialBoard, POPULATION_SIZE);
-        int restartCount = 0;
+        population.initialize(initialBoard, POPULATION_SIZE);
 
         while (!shouldTerminate()) {
-            // Mendapatkan daftar kromosom elit dari populasi saat ini.
-            List<YinYangChromosome> elite = population.getTopChromosomes(ELITE_COUNT);
+            // Perform evolution: selection, crossover, and mutation.
+            population.evolve(MUTATION_RATE, CROSSOVER_RATE);
 
-            // Menerapkan evolusi pada populasi.
-            population.evolve(MUTATION_RATE);
-            applyCrossover(); // Menerapkan crossover untuk menghasilkan individu baru.
-            population.replaceWorstWithElite(elite); // Mengganti individu terburuk dengan individu elit.
+            // Update stats for best chromosome and fitness.
+            updateStats();
 
-            // Mendapatkan kromosom terbaik dari populasi saat ini.
-            YinYangChromosome best = population.getBestChromosome();
-            localSearch(best); // Menerapkan pencarian lokal untuk meningkatkan kromosom terbaik.
-
-            updateStats(); // Memperbarui statistik generasi dan fitness terbaik.
-
-            // Memulai ulang populasi jika algoritma terjebak dan jumlah restart belum mencapai batas.
-            if (stagnantGenerations > MAX_STAGNANT_GENERATIONS / 2 && restartCount < 3) {
-                population.reinitializePopulation(initialBoard, POPULATION_SIZE);
+            // Reinitialize if stagnation persists.
+            if (stagnantGenerations > MAX_STAGNANT_GENERATIONS) {
+                population.reinitialize(initialBoard);
                 stagnantGenerations = 0;
-                restartCount++;
             }
 
+            System.out.println("current generation : " + currentGeneration);
+            System.out.println("current best fitness : " + bestFitness);
+            System.out.println(bestSolution.toString());
             currentGeneration++;
         }
 
-        // Mengembalikan papan dari solusi terbaik yang ditemukan, atau dari kromosom terbaik jika tidak ada solusi yang ditemukan.
-        return bestSolution != null ? bestSolution.getBoard() : population.getBestChromosome().getBoard();
+        // Return the best solution.
+        return bestSolution != null ? bestSolution.getBoard() : population.getBest().getBoard();
     }
 
-    /**
-     * Menerapkan operasi crossover pada populasi untuk menghasilkan variasi genetik baru.
-     * Metode ini memilih dua induk melalui seleksi turnamen dan melakukan crossover dengan probabilitas tertentu.
-     */
-    private void applyCrossover() {
-        for (int i = 0; i < POPULATION_SIZE / 2; i++) {
-            if (random.nextDouble() < CROSSOVER_RATE) {
-                // Memilih dua induk melalui seleksi turnamen.
-                YinYangChromosome parent1 = population.selectByTournament(TOURNAMENT_SIZE);
-                YinYangChromosome parent2 = population.selectByTournament(TOURNAMENT_SIZE);
-                population.crossover(parent1, parent2); // Menerapkan crossover pada induk yang dipilih.
-            }
-        }
-    }
-
-    /**
-     * Menerapkan algoritma pencarian lokal pada kromosom tertentu untuk mencoba meningkatkan fitness-nya.
-     * Pencarian lokal dilakukan dengan mencoba membalik nilai setiap sel kosong dan mempertahankan perubahan jika meningkatkan fitness.
-     *
-     * @param chromosome Kromosom yang akan ditingkatkan melalui pencarian lokal.
-     */
-    private void localSearch(YinYangChromosome chromosome) {
-        YinYangBoard board = chromosome.getBoard();
-        double currentFitness = fitnessFunction.calculate(chromosome);
-        boolean improved;
-
-        for (int i = 0; i < LOCAL_SEARCH_ITERATIONS; i++) {
-            improved = false;
-
-            // Mencoba semua kemungkinan perubahan secara sistematis pada sel yang awalnya kosong.
-            for (int row = 0; row < board.getSize(); row++) {
-                for (int col = 0; col < board.getSize(); col++) {
-                    if (initialBoard.getCell(row, col) == '0') {
-                        char originalValue = board.getCell(row, col);
-                        board.setCell(row, col, originalValue == 'B' ? 'W' : 'B'); // Membalik nilai sel.
-
-                        // Menghitung fitness baru setelah perubahan.
-                        double newFitness = fitnessFunction.calculate(chromosome);
-                        if (newFitness < currentFitness) {
-                            currentFitness = newFitness;
-                            improved = true;
-                        } else {
-                            board.setCell(row, col, originalValue); // Mengembalikan nilai jika tidak ada peningkatan.
-                        }
-                    }
-                }
-            }
-
-            if (!improved) break; // Menghentikan pencarian lokal jika tidak ada peningkatan yang ditemukan.
-        }
-    }
-
-    /**
-     * Menentukan apakah algoritma harus berhenti berdasarkan kondisi terminasi.
-     * Kondisi terminasi meliputi mencapai fitness sempurna, mencapai jumlah generasi maksimum, atau stagnasi evolusi.
-     *
-     * @return {@code true} jika algoritma harus berhenti, {@code false} jika tidak.
-     */
     private boolean shouldTerminate() {
         return bestFitness <= PERFECT_FITNESS ||
-               currentGeneration >= MAX_GENERATIONS ||
-               stagnantGenerations >= MAX_STAGNANT_GENERATIONS;
+               currentGeneration >= MAX_GENERATIONS;
     }
 
-    /**
-     * Memperbarui statistik evolusi seperti fitness terbaik dan jumlah generasi stagnan.
-     * Jika fitness saat ini lebih baik dari fitness terbaik sebelumnya, statistik diperbarui.
-     * Jika tidak ada peningkatan dalam beberapa generasi, jumlah generasi stagnan bertambah.
-     */
     private void updateStats() {
-        YinYangChromosome currentBest = population.getBestChromosome();
+        YinYangChromosome currentBest = population.getBest();
         double currentFitness = fitnessFunction.calculate(currentBest);
 
         if (currentFitness < bestFitness) {
@@ -159,36 +233,24 @@ public class YinYangSolver {
         } else {
             stagnantGenerations++;
         }
-
-        // Secara periodik melakukan reinitialisasi pada individu terburuk jika algoritma terjebak.
-        if (stagnantGenerations > 20) {
-            population.reinitializeWorstIndividuals(POPULATION_SIZE / 10);
-        }
     }
 
-    /**
-     * Metode utama untuk menjalankan {@code YinYangSolver} sebagai aplikasi konsol.
-     * Metode ini membuat papan awal, menjalankan solver, dan mencetak papan awal dan solusi.
-     *
-     * @param args Argumen baris perintah (tidak digunakan).
-     */
-    public static void main(String[] args) {
-        // Contoh papan 6x6 untuk dipecahkan.
-        char[][] initialBoard = {
-            {'0', '0', '0', 'B', '0', 'W'},
-            {'0', '0', 'B', '0', 'B', '0'},
-            {'0', '0', 'W', '0', '0', '0'},
-            {'B', '0', '0', '0', 'W', '0'},
-            {'0', 'B', '0', 'B', '0', '0'},
-            {'W', '0', '0', '0', '0', '0'}
-        };
+    // public static void main(String[] args) {
+    //     char[][] initialBoard = {
+    //         {'0', '0', '0', 'B', '0', 'W'},
+    //         {'0', '0', 'B', '0', 'B', '0'},
+    //         {'0', '0', 'W', '0', '0', '0'},
+    //         {'B', '0', '0', '0', 'W', '0'},
+    //         {'0', 'B', '0', 'B', '0', '0'},
+    //         {'W', '0', '0', '0', '0', '0'}
+    //     };
 
-        YinYangSolver solver = new YinYangSolver(initialBoard);
-        YinYangBoard solution = solver.solve();
+    //     YinYangSolver solver = new YinYangSolver(initialBoard);
+    //     YinYangBoard solution = solver.solve();
 
-        System.out.println("\nPapan Awal:");
-        System.out.println(new YinYangBoard(initialBoard).toString());
-        System.out.println("\nSolusi Akhir:");
-        System.out.println(solution.toString());
-    }
+    //     System.out.println("\nInitial Board:");
+    //     System.out.println(new YinYangBoard(initialBoard).toString());
+    //     System.out.println("\nFinal Solution:");
+    //     System.out.println(solution.toString());
+    // }
 }
