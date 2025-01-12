@@ -167,13 +167,14 @@ public class YinYangSolver {
     private static final int MAX_GENERATIONS = 20;
     private static final int MAX_STAGNANT_GENERATIONS = 3;
     private static final double PERFECT_FITNESS = 0.99;
-    private static final double MUTATION_RATE = 0.7;
-    private static final double CROSSOVER_RATE = 0.5;
+    private static final double MUTATION_RATE = 0.4;
+    private static final double CROSSOVER_RATE = 0.3;
+    private static final double ELITISM_RATE = 0.1;
 
     private final YinYangBoard initialBoard;
     private final YinYangPopulation population;
     private final YinYangFitnessFunction fitnessFunction;
-    private final Random random;
+    private final Random RANDOM;
 
     private int currentGeneration;
     private int stagnantGenerations;
@@ -184,7 +185,7 @@ public class YinYangSolver {
         this.initialBoard = new YinYangBoard(board);
         this.fitnessFunction = new YinYangFitnessFunction();
         this.population = new YinYangPopulation(fitnessFunction);
-        this.random = new Random();
+        this.RANDOM = new Random();
         this.currentGeneration = 0;
         this.stagnantGenerations = 0;
         this.bestFitness = Double.POSITIVE_INFINITY;
@@ -205,6 +206,7 @@ public class YinYangSolver {
             if (stagnantGenerations > MAX_STAGNANT_GENERATIONS) {
                 population.reinitialize(initialBoard);
                 stagnantGenerations = 0;
+                population.addChromosome(bestSolution);
             }
 
             System.out.println("current generation : " + currentGeneration);
@@ -223,6 +225,7 @@ public class YinYangSolver {
     }
 
     private void updateStats() {
+        //double seed = RANDOM.nextDouble();
         YinYangChromosome currentBest = population.getBest();
         double currentFitness = fitnessFunction.calculate(currentBest);
 
@@ -232,7 +235,19 @@ public class YinYangSolver {
             stagnantGenerations = 0;
         } else {
             stagnantGenerations++;
-        }
+        }   
+        // if(seed < ELITISM_RATE) {
+            
+        // }else{
+        //     YinYangChromosome randomChromosome = population.getRandom();
+        //     double randomFitness = fitnessFunction.calculate(randomChromosome);
+        //     bestFitness = randomFitness;
+        //     bestSolution = randomChromosome.clone();
+
+        //     if(stagnantGenerations > MAX_STAGNANT_GENERATIONS) {
+        //         stagnantGenerations = 0;
+        //     }          
+        // }
     }
 
     // public static void main(String[] args) {

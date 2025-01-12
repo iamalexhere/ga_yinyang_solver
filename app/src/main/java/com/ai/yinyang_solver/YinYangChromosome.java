@@ -7,7 +7,6 @@ import java.util.Random;
 public class YinYangChromosome implements Chromosome<YinYangChromosome> {
     private YinYangBoard board; // Papan Yin Yang yang direpresentasikan oleh kromosom
     private static final Random random = new Random(); // Random generator untuk inisialisasi dan mutasi
-    private static final double MUTATION_RATE = 0.1; // Tingkat mutasi
 
     // Constructor dengan board kosong
     public YinYangChromosome(int size) {

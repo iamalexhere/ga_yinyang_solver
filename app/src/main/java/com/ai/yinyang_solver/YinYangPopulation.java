@@ -335,6 +335,10 @@ public class YinYangPopulation extends Population<YinYangChromosome> {
             .orElse(null);
     }
 
+    public YinYangChromosome getRandom() {
+        return getChromosomes().get(RANDOM.nextInt(getSize()));
+    }
+
     // Get statistics for the population
     public String getPopulationStats() {
         double totalFitness = 0;

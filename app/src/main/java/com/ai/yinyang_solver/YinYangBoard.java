@@ -122,8 +122,8 @@ public class YinYangBoard {
         int crossCount = 0; // Inisialisasi jumlah pola menyilang
         
         // Check each possible 2x2 window
-        for(int i = 1; i < size - 1; i++) { // Iterasi baris
-            for(int j = 1; j < size - 1; j++) { // Iterasi kolom
+        for(int i = 1; i < size; i++) { // Iterasi baris
+            for(int j = 1; j < size; j++) { // Iterasi kolom
                 if(isColorCross(i, j)) { // Jika ditemukan pola menyilang
                     crossCount++; // Increment jumlah pola menyilang
                 }
@@ -136,8 +136,8 @@ public class YinYangBoard {
         int monoColorCount = 0; // Inisialisasi jumlah pola menyilang
         
         // Check each possible 2x2 window
-        for(int i = 1; i < size - 1; i++) { // Iterasi baris
-            for(int j = 1; j < size - 1; j++) { // Iterasi kolom
+        for(int i = 1; i < size; i++) { // Iterasi baris
+            for(int j = 1; j < size; j++) { // Iterasi kolom
                 if(isMonoColor(i, j)) { // Jika ditemukan pola menyilang
                     monoColorCount++; // Increment jumlah pola menyilang
                 }

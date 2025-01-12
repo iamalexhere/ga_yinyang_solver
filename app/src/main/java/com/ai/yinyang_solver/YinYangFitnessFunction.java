@@ -4,57 +4,22 @@ package com.ai.yinyang_solver;
 public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome, Double> {
     
     // Adjust weights for better balance
-    private static final double CONNECTIVITY_WEIGHT = 120.0;
-    private static final double CROSSING_PATTERN_WEIGHT = 50.0;
-    private static final double MONO_COLOR__WEIGHT = 300.0;
-    private static final double EMPTY_CELL_WEIGHT = 15.0;
-    private static final double REGION_SIZE_WEIGHT = 5.0;
+    private static final double CONNECTIVITY_WEIGHT = 9.0;
+    private static final double CROSSING_PATTERN_WEIGHT = 5.0;
+    private static final double MONO_COLOR__WEIGHT = 15.0;
     
     @Override
     public Double calculate(YinYangChromosome chromosome) {
         YinYangBoard board = chromosome.getBoard();
         int white = board.countConnectedComponents(YinYangBoard.WHITE)*(board.countConnectedComponents(YinYangBoard.WHITE)-1);
         int black = board.countConnectedComponents(YinYangBoard.BLACK)*(board.countConnectedComponents(YinYangBoard.BLACK)-1);
-         
+        
         double connectivity = white + black;
         int crossPatternCount = board.slidingWindowForColorCross();
         int monoColorCount = board.slidingWindowForMonoColor();
 
         double fitness = connectivity*CONNECTIVITY_WEIGHT + crossPatternCount*CROSSING_PATTERN_WEIGHT + monoColorCount*MONO_COLOR__WEIGHT;
         return fitness;
-    }
-    
-    // Hitung jumlah sel kosong
-    private int countEmptyCells(YinYangBoard board) {
-        int count = 0; // Inisialisasi jumlah sel kosong
-        int size = board.getSize(); // Mendapatkan ukuran board
-        
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (board.getCell(i, j) == YinYangBoard.EMPTY) { // Jika sel kosong
-                    count++; // Increment jumlah sel kosong
-                }
-            }
-        }
-        
-        return count; // Mengembalikan jumlah sel kosong
-    }
-    
-    // Method untuk menghitung keseimbangan ukuran region
-    private double calculateRegionSizeBalance(YinYangBoard board) {
-        // Calculate difference between black and white region sizes
-        int blackCount = 0, whiteCount = 0; // Inisialisasi jumlah sel hitam dan putih
-        int size = board.getSize(); // Mendapatkan ukuran board
-        
-        for(int i = 0; i < size; i++) {
-            for(int j = 0; j < size; j++) {
-                if(board.getCell(i,j) == YinYangBoard.BLACK) blackCount++; // Jika sel hitam, increment jumlah sel hitam
-                else if(board.getCell(i,j) == YinYangBoard.WHITE) whiteCount++; // Jika sel putih, increment jumlah sel putih
-            }
-        }
-        
-        // Mengembalikan selisih absolut antara jumlah sel hitam dan putih, dinormalisasi dengan ukuran board
-        return Math.abs(blackCount - whiteCount) / (double)(size * size);
     }
     
     // Method untuk mendapatkan deskripsi detail fitness
@@ -74,17 +39,6 @@ public class YinYangFitnessFunction implements FitnessFunction<YinYangChromosome
         description.append("2. Crossing Patterns: ").append(crossingPatterns) // Menambahkan jumlah pola menyilang ke deskripsi
                   .append(" (").append(-crossingPenalty).append(" points)\n"); // Menambahkan penalti pola menyilang ke deskripsi
         
-        // Cek sel kosong
-        int emptyCells = countEmptyCells(board); // Menghitung jumlah sel kosong
-        double emptyPenalty = emptyCells * EMPTY_CELL_WEIGHT; // Menghitung penalti sel kosong
-        description.append("3. Empty Cells: ").append(emptyCells) // Menambahkan jumlah sel kosong ke deskripsi
-                  .append(" (").append(-emptyPenalty).append(" points)\n"); // Menambahkan penalti sel kosong ke deskripsi
-        
-        // Cek keseimbangan region
-        double regionBalance = calculateRegionSizeBalance(board); // Menghitung keseimbangan region
-        double regionPenalty = regionBalance * REGION_SIZE_WEIGHT; // Menghitung penalti keseimbangan region
-        description.append("4. Region Balance: ").append(String.format("%.2f", regionBalance)) // Menambahkan keseimbangan region ke deskripsi
-                  .append(" (").append(String.format("%.2f", -regionPenalty)).append(" points)\n"); // Menambahkan penalti keseimbangan region ke deskripsi
         
         return description.toString(); // Mengembalikan deskripsi fitness
     }
