@@ -12,9 +12,14 @@ public class PerformanceVisualizer {
         Color.CYAN, Color.PINK, Color.YELLOW, Color.GRAY, Color.DARK_GRAY
     };
 
+    private final String outputDir;
     private Map<Integer, List<Double>> populationSizeHistories = new HashMap<>();
     private Map<Double, List<Double>> mutationRateHistories = new HashMap<>();
     private Map<Double, List<Double>> crossoverRateHistories = new HashMap<>();
+
+    public PerformanceVisualizer(String outputDir) {
+        this.outputDir = outputDir;
+    }
 
     public void addPopulationSizeHistory(int popSize, List<Double> history) {
         populationSizeHistories.put(popSize, new ArrayList<>(history));
@@ -106,6 +111,6 @@ public class PerformanceVisualizer {
     }
 
     private void saveChart(XYChart chart, String filename) throws IOException {
-        BitmapEncoder.saveBitmap(chart, "./" + filename, BitmapEncoder.BitmapFormat.PNG);
+        BitmapEncoder.saveBitmap(chart, outputDir + "/" + filename, BitmapEncoder.BitmapFormat.PNG);
     }
 }

@@ -1,0 +1,72 @@
+.container {
+	max-width: 800px;
+	margin: 20px auto;
+	text-align: center;
+}
+
+textarea {
+	width: 300px;
+	height: 150px;
+	margin: 10px;
+	font-family: monospace;
+}
+
+button {
+	display: block;
+	margin: 10px auto;
+	padding: 10px 20px;
+}
+
+#board {
+	display: inline-grid;
+	gap: 2px;
+	background: #dcb35c;
+	padding: 20px;
+	margin-top: 20px;
+}
+
+.cell {
+	width: 40px;
+	height: 40px;
+	position: relative;
+	background: #dcb35c;
+}
+
+.cell::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background: #000;
+}
+
+.cell::after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 0;
+	height: 100%;
+	width: 2px;
+	background: #000;
+}
+
+.stone {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	z-index: 1;
+}
+
+.stone.black {
+	background: #000;
+}
+
+.stone.white {
+	background: #fff;
+	border: 1px solid #000;
+}
