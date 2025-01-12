@@ -5,26 +5,27 @@ package com.ai.yinyang_solver;
 
 public class App {
     public static void main(String[] args) {
-        char[][] initialBoard = {
-            {'0', '0', '0', 'B', '0', 'W'},
-            {'0', '0', 'B', '0', 'B', '0'},
-            {'0', '0', 'W', '0', '0', '0'},
-            {'B', '0', '0', '0', 'W', '0'},
-            {'0', 'B', '0', 'B', '0', '0'},
-            {'W', '0', '0', '0', '0', '0'}
+        // Example board
+        char[][] board = {
+            {'0', '0', '0', '0', '0', '0'},
+            {'0', '0', 'B', '0', '0', '0'},
+            {'0', 'W', '0', 'B', 'W', '0'},
+            {'0', 'W', 'W', 'W', '0', '0'},
+            {'0', 'W', '0', '0', 'W', '0'},
+            {'0', '0', 'B', '0', '0', 'B'},
         };
 
-        // Gunakan seed spesifik untuk hasil yang konsisten
-        long seed = 12345L;
-        YinYangSolver solver = new YinYangSolver(initialBoard, seed);
+        // Try different population sizes
+        int[] populationSizes = {1000, 2000, 5000, 10000};
         
-        System.out.println("Initial Board:");
-        System.out.println(new YinYangBoard(initialBoard).toString());
-        
-        System.out.println("\nSolving with seed: " + solver.getSeed());
-        YinYangBoard solution = solver.solve();
-        
-        System.out.println("\nFinal Solution:");
-        System.out.println(solution.toString());
+        for (int popSize : populationSizes) {
+            System.out.println("\nTesting with population size: " + popSize);
+            YinYangSolver solver = new YinYangSolver(board, popSize);
+            solver.solve();
+        }
+
+        // Generate comparison plot
+        YinYangSolver.plotAllFitnessHistories();
+        System.out.println("\nFitness history comparison plot has been saved as 'fitness_history_comparison.png'");
     }
 }
