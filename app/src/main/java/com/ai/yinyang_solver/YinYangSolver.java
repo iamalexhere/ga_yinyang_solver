@@ -16,7 +16,7 @@ import java.awt.Color;
  * Class {@code YinYangSolver} implements a genetic algorithm to solve the Yin Yang puzzle.
  */
 public class YinYangSolver {
-    private static final int MAX_GENERATIONS = 500;
+    private static final int MAX_GENERATIONS = 100;
     private static final int MAX_STAGNANT_GENERATIONS = 3;
     private static final double PERFECT_FITNESS = 0.99;
     private static final double ELITISM_RATE = 0.1;
