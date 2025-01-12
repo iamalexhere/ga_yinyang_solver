@@ -15,17 +15,46 @@ public class App {
             {'0', '0', 'B', '0', '0', 'B'},
         };
 
-        // Try different population sizes
+        PerformanceVisualizer visualizer = new PerformanceVisualizer();
+
+        // Test different population sizes
+        System.out.println("\nTesting different population sizes...");
         int[] populationSizes = {1000, 2000, 5000, 10000};
-        
         for (int popSize : populationSizes) {
-            System.out.println("\nTesting with population size: " + popSize);
+            System.out.println("\nTesting population size: " + popSize);
             YinYangSolver solver = new YinYangSolver(board, popSize);
             solver.solve();
+            visualizer.addPopulationSizeHistory(popSize, solver.getFitnessHistory());
         }
 
-        // Generate comparison plot
-        YinYangSolver.plotAllFitnessHistories();
-        System.out.println("\nFitness history comparison plot has been saved as 'fitness_history_comparison.png'");
+        // Test different mutation rates
+        System.out.println("\nTesting different mutation rates...");
+        double[] mutationRates = {0.1, 0.2, 0.4, 0.6};
+        for (double mutationRate : mutationRates) {
+            System.out.println("\nTesting mutation rate: " + mutationRate);
+            YinYangSolver solver = new YinYangSolver(board, 5000, mutationRate, 0.3);
+            solver.solve();
+            visualizer.addMutationRateHistory(mutationRate, solver.getFitnessHistory());
+        }
+
+        // Test different crossover rates
+        System.out.println("\nTesting different crossover rates...");
+        double[] crossoverRates = {0.1, 0.3, 0.5, 0.7};
+        for (double crossoverRate : crossoverRates) {
+            System.out.println("\nTesting crossover rate: " + crossoverRate);
+            YinYangSolver solver = new YinYangSolver(board, 5000, 0.4, crossoverRate);
+            solver.solve();
+            visualizer.addCrossoverRateHistory(crossoverRate, solver.getFitnessHistory());
+        }
+
+        // Generate all comparison plots
+        visualizer.plotPopulationSizeComparison();
+        visualizer.plotMutationRateComparison();
+        visualizer.plotCrossoverRateComparison();
+
+        System.out.println("\nPerformance comparison plots have been saved:");
+        System.out.println("1. population_size_comparison.png");
+        System.out.println("2. mutation_rate_comparison.png");
+        System.out.println("3. crossover_rate_comparison.png");
     }
 }

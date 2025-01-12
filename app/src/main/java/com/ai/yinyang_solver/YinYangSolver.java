@@ -17,8 +17,6 @@ public class YinYangSolver {
     private static final int MAX_GENERATIONS = 500;
     private static final int MAX_STAGNANT_GENERATIONS = 3;
     private static final double PERFECT_FITNESS = 0.99;
-    private static final double MUTATION_RATE = 0.4;
-    private static final double CROSSOVER_RATE = 0.3;
     private static final double ELITISM_RATE = 0.1;
 
     private final YinYangBoard initialBoard;
@@ -27,6 +25,8 @@ public class YinYangSolver {
     private final long seed;
     private final List<Double> fitnessHistory;
     private final int populationSize;
+    private final double mutationRate;
+    private final double crossoverRate;
 
     private int currentGeneration;
     private int stagnantGenerations;
@@ -38,10 +38,14 @@ public class YinYangSolver {
     private static final Color[] COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.MAGENTA};
 
     public YinYangSolver(char[][] board, int populationSize) {
-        this(board, System.currentTimeMillis(), populationSize);
+        this(board, System.currentTimeMillis(), populationSize, 0.4, 0.3); // Default rates
     }
 
-    public YinYangSolver(char[][] board, long seed, int populationSize) {
+    public YinYangSolver(char[][] board, int populationSize, double mutationRate, double crossoverRate) {
+        this(board, System.currentTimeMillis(), populationSize, mutationRate, crossoverRate);
+    }
+
+    public YinYangSolver(char[][] board, long seed, int populationSize, double mutationRate, double crossoverRate) {
         this.initialBoard = new YinYangBoard(board);
         this.fitnessFunction = new YinYangFitnessFunction();
         this.population = new YinYangPopulation(fitnessFunction, seed);
@@ -52,6 +56,8 @@ public class YinYangSolver {
         this.bestSolution = null;
         this.fitnessHistory = new ArrayList<>();
         this.populationSize = populationSize;
+        this.mutationRate = mutationRate;
+        this.crossoverRate = crossoverRate;
     }
 
     public YinYangBoard solve() {
@@ -63,7 +69,7 @@ public class YinYangSolver {
             List<YinYangChromosome> elites = population.getTopChromosomes(eliteCount);
             
             // 2. Evolusi populasi
-            population.evolve(MUTATION_RATE, CROSSOVER_RATE);
+            population.evolve(mutationRate, crossoverRate);
             
             // 3. Kembalikan elite chromosomes
             population.replaceWorstWithElite(elites);
@@ -79,6 +85,8 @@ public class YinYangSolver {
             }
 
             System.out.println("Population Size: " + populationSize);
+            System.out.println("Mutation Rate: " + mutationRate);
+            System.out.println("Crossover Rate: " + crossoverRate);
             System.out.println("Current generation: " + currentGeneration);
             System.out.println("Current best fitness: " + bestFitness);
             System.out.println(bestSolution.toString());
@@ -110,6 +118,22 @@ public class YinYangSolver {
         }
         
         fitnessHistory.add(currentFitness);
+    }
+
+    public List<Double> getFitnessHistory() {
+        return new ArrayList<>(fitnessHistory);
+    }
+
+    public int getPopulationSize() {
+        return populationSize;
+    }
+
+    public double getMutationRate() {
+        return mutationRate;
+    }
+
+    public double getCrossoverRate() {
+        return crossoverRate;
     }
 
     public static void plotAllFitnessHistories() {
