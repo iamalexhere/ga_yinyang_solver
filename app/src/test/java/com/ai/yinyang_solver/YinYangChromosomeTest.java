@@ -93,4 +93,151 @@ public class YinYangChromosomeTest {
         
         assertNotEquals("Mutation should change at least one cell", beforeMutation, afterMutation); // Memastikan mutasi mengubah setidaknya satu sel
     }
+    
+    @Test
+    public void testCloneChromosome() {
+        // Inisialisasi papan dengan nilai awal
+        char[][] initialBoard = {
+            {'B', 'W', '0'},
+            {'0', 'B', 'W'},
+            {'W', '0', 'B'}
+        };
+        YinYangChromosome original = new YinYangChromosome(new YinYangBoard(initialBoard));
+        
+        // Clone kromosom
+        YinYangChromosome cloned = original.clone();
+        
+        // Test bahwa clone memiliki nilai yang sama
+        assertEquals(original.toString(), cloned.toString());
+        
+        // Test bahwa clone adalah objek yang berbeda
+        assertNotSame(original, cloned);
+        assertNotSame(original.getBoard(), cloned.getBoard());
+        
+        // Test bahwa mengubah clone tidak mengubah original
+        cloned.mutate();
+        assertNotEquals(original.toString(), cloned.toString());
+    }
+
+    @Test
+    public void testCrossoverWithFixedCells() {
+        // Inisialisasi board dengan fixed cells
+        char[][] board1 = {
+            {'B', 'W', '0'},
+            {'0', 'B', 'W'},
+            {'W', '0', 'B'}
+        };
+        char[][] board2 = {
+            {'B', 'W', 'B'},
+            {'W', 'B', 'W'},
+            {'B', 'W', 'B'}
+        };
+        
+        YinYangChromosome parent1 = new YinYangChromosome(new YinYangBoard(board1));
+        YinYangChromosome parent2 = new YinYangChromosome(new YinYangBoard(board2));
+        
+        // Inisialisasi sel kosong
+        parent1.initializeRandom();
+        
+        List<YinYangChromosome> offspring = parent1.crossover(parent2);
+        
+        // Test bahwa fixed cells tidak berubah pada offspring
+        YinYangChromosome child1 = offspring.get(0);
+        assertEquals('B', child1.getBoard().getCell(0, 0));
+        assertEquals('W', child1.getBoard().getCell(0, 1));
+        
+        YinYangChromosome child2 = offspring.get(1);
+        assertEquals('B', child2.getBoard().getCell(0, 0));
+        assertEquals('W', child2.getBoard().getCell(0, 1));
+    }
+
+    @Test
+    public void testMultipleMutations() {
+        // Inisialisasi board
+        char[][] initialBoard = {
+            {'0', '0', '0'},
+            {'0', '0', '0'},
+            {'0', '0', '0'}
+        };
+        YinYangChromosome chromosome = new YinYangChromosome(new YinYangBoard(initialBoard));
+        chromosome.initializeRandom();
+        
+        // Simpan state awal
+        String initialState = chromosome.toString();
+        
+        // Lakukan multiple mutasi
+        for (int i = 0; i < 10; i++) {
+            chromosome.mutate();
+        }
+        
+        // Test bahwa board berubah setelah multiple mutasi
+        assertNotEquals(initialState, chromosome.toString());
+    }
+
+    @Test
+    public void testInitializeRandomWithDifferentSizes() {
+        // Test small board (2x2)
+        YinYangChromosome smallChromosome = new YinYangChromosome(2);
+        smallChromosome.initializeRandom();
+        assertValidBoard(smallChromosome.getBoard(), 2);
+        
+        // Test medium board (5x5)
+        YinYangChromosome mediumChromosome = new YinYangChromosome(5);
+        mediumChromosome.initializeRandom();
+        assertValidBoard(mediumChromosome.getBoard(), 5);
+        
+        // Test large board (8x8)
+        YinYangChromosome largeChromosome = new YinYangChromosome(8);
+        largeChromosome.initializeRandom();
+        assertValidBoard(largeChromosome.getBoard(), 8);
+    }
+
+    @Test
+    public void testCrossoverPreservesValidValues() {
+        // Inisialisasi parents dengan nilai valid
+        char[][] board1 = {
+            {'B', 'W', 'B'},
+            {'W', 'B', 'W'},
+            {'B', 'W', 'B'}
+        };
+        char[][] board2 = {
+            {'W', 'B', 'W'},
+            {'B', 'W', 'B'},
+            {'W', 'B', 'W'}
+        };
+        
+        YinYangChromosome parent1 = new YinYangChromosome(new YinYangBoard(board1));
+        YinYangChromosome parent2 = new YinYangChromosome(new YinYangBoard(board2));
+        
+        List<YinYangChromosome> offspring = parent1.crossover(parent2);
+        
+        // Test bahwa offspring hanya memiliki nilai valid (B atau W)
+        for (YinYangChromosome child : offspring) {
+            assertValidValues(child.getBoard());
+        }
+    }
+
+    // Helper method untuk memvalidasi board
+    private void assertValidBoard(YinYangBoard board, int expectedSize) {
+        assertEquals(expectedSize, board.getSize());
+        for (int i = 0; i < expectedSize; i++) {
+            for (int j = 0; j < expectedSize; j++) {
+                char cell = board.getCell(i, j);
+                assertTrue("Cell should be either BLACK or WHITE",
+                    cell == YinYangBoard.BLACK || cell == YinYangBoard.WHITE);
+            }
+        }
+    }
+
+    // Helper method untuk memvalidasi nilai-nilai dalam board
+    private void assertValidValues(YinYangBoard board) {
+        int size = board.getSize();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                char cell = board.getCell(i, j);
+                assertTrue("Cell should be either BLACK or WHITE",
+                    cell == YinYangBoard.BLACK || cell == YinYangBoard.WHITE);
+            }
+        }
+    }
 }

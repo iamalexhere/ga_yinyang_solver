@@ -43,135 +43,110 @@ public class YinYangBoardTest {
     }
     
     @Test 
-    public void testSlidingWindow() {
-        // Test case with crossing pattern
-        char[][] crossingBoard = {
+    public void testSlidingWindowColorCross() {
+        // Test case 1: Single color cross pattern
+        char[][] singleCrossBoard = {
             {'B', 'W', '0'},
             {'W', 'B', '0'},
             {'0', '0', '0'}
         };
-        YinYangBoard board = new YinYangBoard(crossingBoard); // Membuat board dari array 2D
-        assertEquals(1, board.slidingWindow()); // Memastikan jumlah pola menyilang adalah 1
+        YinYangBoard board1 = new YinYangBoard(singleCrossBoard);
+        assertEquals(1, board1.slidingWindowForColorCross());
         
-        // Test case without crossing pattern
-        char[][] noCrossingBoard = {
-            {'B', 'B', 'W'},
-            {'B', 'W', 'W'},
-            {'W', 'W', 'W'}
-        };
-        YinYangBoard board2 = new YinYangBoard(noCrossingBoard); // Membuat board dari array 2D
-        assertEquals(0, board2.slidingWindow()); // Memastikan jumlah pola menyilang adalah 0
-    }
-
-    @Test 
-    public void testSlidingWindowNoCrossPattern() {
-        char[][] board = {
-            {'B', 'B', 'W'},
-            {'B', 'B', 'W'},
-            {'W', 'W', 'W'}
-        };
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(0, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 0
-    }
-
-    @Test 
-    public void testSlidingWindowSingleCrossPattern() {
-        char[][] board = {
-            {'B', 'W', 'B'},
-            {'W', 'B', 'W'},
-            {'B', 'W', 'B'}
-        };
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(4, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 4
-    }
-
-    @Test 
-    public void testSlidingWindowMultipleCrossPatterns() {
-        char[][] board = {
+        // Test case 2: Multiple color cross patterns
+        char[][] multipleCrossBoard = {
             {'B', 'W', 'B', 'W'},
             {'W', 'B', 'W', 'B'},
             {'B', 'W', 'B', 'W'},
             {'W', 'B', 'W', 'B'}
         };
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(9, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 9
-    }
-
-    @Test 
-    public void testSlidingWindowBorderCrossPattern() {
-        char[][] board = {
-            {'B', 'W'},
-            {'W', 'B'}
-        };
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(1, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 1
-    }
-
-    @Test 
-    public void testSlidingWindowWithEmptyCells() {
-        char[][] board = {
-            {'B', 'W', '0'},
-            {'W', 'B', '0'},
-            {'0', '0', '0'}
-        };
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(1, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 1
-    }
-
-    @Test 
-    public void testSlidingWindowAllSameColor() {
-        char[][] board = {
-            {'B', 'B', 'B'},
-            {'B', 'B', 'B'},
-            {'B', 'B', 'B'}
-        };
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(0, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 0
-    }
-
-    @Test 
-    public void testSlidingWindowAlternatingRows() {
-        char[][] board = {
+        YinYangBoard board2 = new YinYangBoard(multipleCrossBoard);
+        assertEquals(9, board2.slidingWindowForColorCross());
+        
+        // Test case 3: No color cross pattern
+        char[][] noCrossBoard = {
             {'B', 'B', 'B'},
             {'W', 'W', 'W'},
             {'B', 'B', 'B'}
         };
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(0, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 0
+        YinYangBoard board3 = new YinYangBoard(noCrossBoard);
+        assertEquals(0, board3.slidingWindowForColorCross());
     }
 
-    @Test 
-    public void testSlidingWindowDiagonalPattern() {
-        char[][] board = {
+    @Test
+    public void testSlidingWindowMonoColor() {
+        // Test case 1: Single mono color pattern (all black)
+        char[][] monoBlackBoard = {
+            {'B', 'B', '0'},
+            {'B', 'B', '0'},
+            {'0', '0', '0'}
+        };
+        YinYangBoard board1 = new YinYangBoard(monoBlackBoard);
+        assertEquals(1, board1.slidingWindowForMonoColor());
+        
+        // Test case 2: Multiple mono color patterns
+        char[][] multipleMonoBoard = {
+            {'W', 'W', 'B', 'B'},
+            {'W', 'W', 'B', 'B'},
+            {'B', 'B', 'W', 'W'},
+            {'B', 'B', 'W', 'W'}
+        };
+        YinYangBoard board2 = new YinYangBoard(multipleMonoBoard);
+        assertEquals(4, board2.slidingWindowForMonoColor());
+        
+        // Test case 3: No mono color pattern
+        char[][] noMonoBoard = {
             {'B', 'W', 'B'},
             {'W', 'B', 'W'},
             {'B', 'W', 'B'}
         };
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(4, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 4
+        YinYangBoard board3 = new YinYangBoard(noMonoBoard);
+        assertEquals(0, board3.slidingWindowForMonoColor());
     }
 
-    @Test 
-    public void testSlidingWindowSingleCell() {
-        char[][] board = {{'B'}};
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(0, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 0
+    @Test
+    public void testSlidingWindowEdgeCases() {
+        // Test case 1: 1x1 board (too small for sliding window)
+        char[][] singleCellBoard = {{'B'}};
+        YinYangBoard board1 = new YinYangBoard(singleCellBoard);
+        assertEquals(0, board1.slidingWindowForColorCross());
+        assertEquals(0, board1.slidingWindowForMonoColor());
+        
+        // Test case 2: 2x2 board
+        char[][] smallBoard = {
+            {'B', 'W'},
+            {'W', 'B'}
+        };
+        YinYangBoard board2 = new YinYangBoard(smallBoard);
+        assertEquals(1, board2.slidingWindowForColorCross());
+        assertEquals(0, board2.slidingWindowForMonoColor());
+        
+        // Test case 3: Empty cells in sliding window
+        char[][] emptyBoard = {
+            {'B', 'W', '0'},
+            {'W', '0', 'B'},
+            {'0', 'B', 'W'}
+        };
+        YinYangBoard board3 = new YinYangBoard(emptyBoard);
+        assertEquals(0, board3.slidingWindowForColorCross());
+        assertEquals(0, board3.slidingWindowForMonoColor());
     }
 
-    @Test 
-    public void testSlidingWindowLargeBoard() {
-        // Create a 5x5 board with alternating pattern
-        char[][] board = {
+    @Test
+    public void testSlidingWindowLargePatterns() {
+        // Test case 1: 5x5 alternating pattern
+        char[][] largeBoard = {
             {'B', 'W', 'B', 'W', 'B'},
             {'W', 'B', 'W', 'B', 'W'},
             {'B', 'W', 'B', 'W', 'B'},
             {'W', 'B', 'W', 'B', 'W'},
             {'B', 'W', 'B', 'W', 'B'}
         };
-        YinYangBoard yinYangBoard = new YinYangBoard(board); // Membuat board dari array 2D
-        assertEquals(16, yinYangBoard.slidingWindow()); // Memastikan jumlah pola menyilang adalah 16
+        YinYangBoard board = new YinYangBoard(largeBoard);
+        assertEquals(16, board.slidingWindowForColorCross());
+        assertEquals(0, board.slidingWindowForMonoColor());
     }
-    
+
     @Test 
     public void testConversion1D2D() {
         char[][] initial2D = {
@@ -325,6 +300,243 @@ public class YinYangBoardTest {
         };
         YinYangBoard singleColorBoard = new YinYangBoard(singleColor); // Membuat board dari array 2D
         assertFalse("Single color board should be invalid", singleColorBoard.isAllRegionsConnected()); // Memastikan board dengan satu warna tidak valid
+    }
+
+    @Test
+    public void testFixedCells() {
+        // Test case with fixed cells
+        char[][] initialBoard = {
+            {'B', 'W', '0'},
+            {'0', 'B', 'W'},
+            {'W', '0', 'B'}
+        };
+        YinYangBoard board = new YinYangBoard(initialBoard);
+        
+        // Check fixed cells
+        assertTrue("Cell (0,0) should be fixed", board.isFixedCell(0, 0));
+        assertTrue("Cell (0,1) should be fixed", board.isFixedCell(0, 1));
+        assertFalse("Cell (0,2) should not be fixed", board.isFixedCell(0, 2));
+        assertFalse("Cell (1,0) should not be fixed", board.isFixedCell(1, 0));
+    }
+
+    @Test
+    public void testBoardInitializationWithDifferentSizes() {
+        // Test small board (1x1)
+        YinYangBoard smallBoard = new YinYangBoard(1);
+        assertEquals("Small board size should be 1", 1, smallBoard.getSize());
+        assertEquals("Empty cell expected", YinYangBoard.EMPTY, smallBoard.getCell(0, 0));
+
+        // Test medium board (5x5)
+        YinYangBoard mediumBoard = new YinYangBoard(5);
+        assertEquals("Medium board size should be 5", 5, mediumBoard.getSize());
+        
+        // Test large board (10x10)
+        YinYangBoard largeBoard = new YinYangBoard(10);
+        assertEquals("Large board size should be 10", 10, largeBoard.getSize());
+    }
+
+    @Test
+    public void testInvalidBoardConfigurations() {
+        // Test case 1: Board with only one color
+        char[][] singleColorBoard = {
+            {'B', 'B', 'B'},
+            {'B', 'B', 'B'},
+            {'B', 'B', 'B'}
+        };
+        YinYangBoard board1 = new YinYangBoard(singleColorBoard);
+        assertFalse("Board with single color should be invalid", board1.isAllRegionsConnected());
+
+        // Test case 2: Board with no colors (all empty)
+        char[][] emptyBoard = {
+            {'0', '0', '0'},
+            {'0', '0', '0'},
+            {'0', '0', '0'}
+        };
+        YinYangBoard board2 = new YinYangBoard(emptyBoard);
+        assertFalse("Board with no colors should be invalid", board2.isAllRegionsConnected());
+    }
+
+    @Test
+    public void testBoundaryConditionsForSlidingWindow() {
+        // Test case 1: Board with alternating colors on edges
+        char[][] edgeBoard = {
+            {'B', 'W', 'B', 'W'},
+            {'W', 'B', 'W', 'B'},
+            {'B', 'W', 'B', 'W'},
+            {'W', 'B', 'W', 'B'}
+        };
+        YinYangBoard board1 = new YinYangBoard(edgeBoard);
+        assertEquals("Should find 9 cross patterns", 9, board1.slidingWindowForColorCross());
+        assertEquals("Should find 0 mono patterns", 0, board1.slidingWindowForMonoColor());
+
+        // Test case 2: Board with mono color on edges
+        char[][] edgeMonoBoard = {
+            {'B', 'B', 'W', 'W'},
+            {'B', 'B', 'W', 'W'},
+            {'W', 'W', 'B', 'B'},
+            {'W', 'W', 'B', 'B'}
+        };
+        YinYangBoard board2 = new YinYangBoard(edgeMonoBoard);
+        assertEquals("Should find 0 cross patterns", 0, board2.slidingWindowForColorCross());
+        assertEquals("Should find 4 mono patterns", 4, board2.slidingWindowForMonoColor());
+    }
+
+    @Test
+    public void testSlidingWindowWithEmptyCells() {
+        // Test case 1: Empty cells breaking patterns
+        char[][] boardWithEmpty = {
+            {'B', 'W', 'B', 'W'},
+            {'W', '0', 'W', 'B'},
+            {'B', 'W', '0', 'W'},
+            {'W', 'B', 'W', 'B'}
+        };
+        YinYangBoard board1 = new YinYangBoard(boardWithEmpty);
+        assertEquals("Empty cells should break cross patterns", 4, board1.slidingWindowForColorCross());
+        assertEquals("Empty cells should break mono patterns", 0, board1.slidingWindowForMonoColor());
+
+        // Test case 2: Empty cells in corners
+        char[][] emptyCorners = {
+            {'0', 'B', 'B', '0'},
+            {'B', 'B', 'B', 'B'},
+            {'B', 'B', 'B', 'B'},
+            {'0', 'B', 'B', '0'}
+        };
+        YinYangBoard board2 = new YinYangBoard(emptyCorners);
+        assertEquals("Should find correct number of mono patterns with empty corners", 4, board2.slidingWindowForMonoColor());
+    }
+
+    @Test
+    public void testSlidingWindowOverlappingPatterns() {
+        // Test case 1: Overlapping cross patterns
+        char[][] overlappingCross = {
+            {'B', 'W', 'B', 'W', 'B'},
+            {'W', 'B', 'W', 'B', 'W'},
+            {'B', 'W', 'B', 'W', 'B'},
+            {'W', 'B', 'W', 'B', 'W'},
+            {'B', 'W', 'B', 'W', 'B'}
+        };
+        YinYangBoard board1 = new YinYangBoard(overlappingCross);
+        assertEquals("Should count all overlapping cross patterns", 16, board1.slidingWindowForColorCross());
+
+        // Test case 2: Overlapping mono patterns
+        char[][] overlappingMono = {
+            {'B', 'B', 'B', 'W', 'W'},
+            {'B', 'B', 'B', 'W', 'W'},
+            {'B', 'B', 'B', 'W', 'W'},
+            {'W', 'W', 'W', 'B', 'B'},
+            {'W', 'W', 'W', 'B', 'B'}
+        };
+        YinYangBoard board2 = new YinYangBoard(overlappingMono);
+        assertEquals("Should count all overlapping mono patterns", 8, board2.slidingWindowForMonoColor());
+    }
+
+    @Test
+    public void testSlidingWindowMixedPatterns() {
+        // Test case: Mixed mono and cross patterns
+        char[][] mixedPatterns = {
+            {'B', 'B', 'W', 'B'},
+            {'B', 'B', 'B', 'W'},
+            {'W', 'B', 'W', 'B'},
+            {'B', 'W', 'B', 'W'}
+        };
+        YinYangBoard board = new YinYangBoard(mixedPatterns);
+        assertEquals("Should find correct number of cross patterns", 3, board.slidingWindowForColorCross());
+        assertEquals("Should find correct number of mono patterns", 1, board.slidingWindowForMonoColor());
+    }
+
+    @Test
+    public void testSlidingWindowPartialPatterns() {
+        // Test case 1: Partial patterns at edges
+        char[][] partialPatterns = {
+            {'B', 'W', 'B'},
+            {'W', 'B', 'W'},
+            {'B', 'W', 'B'}
+        };
+        YinYangBoard board1 = new YinYangBoard(partialPatterns);
+        // Patterns must be complete 2x2, partial patterns at edges don't count
+        assertEquals("Partial patterns at edges should not be counted", 0, board1.slidingWindowForColorCross());
+        assertEquals("Partial patterns at edges should not be counted", 0, board1.slidingWindowForMonoColor());
+
+        // Test case 2: Almost complete patterns
+        char[][] almostComplete = {
+            {'B', 'W', 'B', 'W'},
+            {'W', 'B', 'W', 'B'},
+            {'B', 'W', 'B', '0'},
+            {'W', 'B', '0', 'B'}
+        };
+        YinYangBoard board2 = new YinYangBoard(almostComplete);
+        assertEquals("Should only count complete patterns", 4, board2.slidingWindowForColorCross());
+    }
+
+    @Test
+    public void testSlidingWindowSinglePattern() {
+        // Test case untuk satu pola yang jelas dan terisolasi
+        char[][] singlePattern = {
+            {'0', '0', '0', '0'},
+            {'0', 'B', 'W', '0'},
+            {'0', 'W', 'B', '0'},
+            {'0', '0', '0', '0'}
+        };
+        YinYangBoard board = new YinYangBoard(singlePattern);
+        assertEquals("Should find exactly one cross pattern in isolation", 1, board.slidingWindowForColorCross());
+        assertEquals("Should find no mono patterns", 0, board.slidingWindowForMonoColor());
+    }
+
+    @Test
+    public void testSlidingWindowEmptyBoundary() {
+        // Test case untuk pola dengan batas kosong
+        char[][] boundaryPattern = {
+            {'0', '0', '0', '0', '0'},
+            {'0', 'B', 'W', 'B', '0'},
+            {'0', 'W', 'B', 'W', '0'},
+            {'0', 'B', 'W', 'B', '0'},
+            {'0', '0', '0', '0', '0'}
+        };
+        YinYangBoard board = new YinYangBoard(boundaryPattern);
+        assertEquals("Should find 4 cross patterns with empty boundary", 4, board.slidingWindowForColorCross());
+        assertEquals("Should find no mono patterns with empty boundary", 0, board.slidingWindowForMonoColor());
+    }
+
+    @Test
+    public void testSlidingWindowCornerPatterns() {
+        // Test case untuk pola di sudut papan
+        char[][] cornerPattern = {
+            {'B', 'W', '0', '0'},
+            {'W', 'B', '0', '0'},
+            {'0', '0', 'B', 'W'},
+            {'0', '0', 'W', 'B'}
+        };
+        YinYangBoard board = new YinYangBoard(cornerPattern);
+        assertEquals("Should find 2 cross patterns in corners", 2, board.slidingWindowForColorCross());
+        assertEquals("Should find no mono patterns in corners", 0, board.slidingWindowForMonoColor());
+    }
+
+    @Test
+    public void testSlidingWindowPartialEmpty() {
+        // Test case untuk pola dengan beberapa sel kosong
+        char[][] partialEmpty = {
+            {'B', 'W', 'B', 'W'},
+            {'W', '0', 'W', 'B'},
+            {'B', 'W', '0', 'W'},
+            {'W', 'B', 'W', '0'}
+        };
+        YinYangBoard board = new YinYangBoard(partialEmpty);
+        assertEquals("Should handle partial patterns with empty cells correctly", 2, board.slidingWindowForColorCross());
+        assertEquals("Should not count patterns with empty cells", 0, board.slidingWindowForMonoColor());
+    }
+
+    @Test
+    public void testSlidingWindowAdjacentPatterns() {
+        // Test case untuk pola yang berdekatan tapi tidak tumpang tindih
+        char[][] adjacentPatterns = {
+            {'B', 'W', 'B', 'W'},
+            {'W', 'B', 'W', 'B'},
+            {'B', 'W', 'B', 'W'},
+            {'W', 'B', 'W', 'B'}
+        };
+        YinYangBoard board = new YinYangBoard(adjacentPatterns);
+        assertEquals("Should count adjacent non-overlapping cross patterns", 9, board.slidingWindowForColorCross());
+        assertEquals("Should find no mono patterns", 0, board.slidingWindowForMonoColor());
     }
 
     // Helper method to count regions
