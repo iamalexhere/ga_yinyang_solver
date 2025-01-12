@@ -7,8 +7,8 @@ import java.util.List;
  * Class {@code YinYangSolver} implements a genetic algorithm to solve the Yin Yang puzzle.
  */
 public class YinYangSolver {
-    private static final int POPULATION_SIZE = 200;
-    private static final int MAX_GENERATIONS = 20;
+    private static final int POPULATION_SIZE = 5000;
+    private static final int MAX_GENERATIONS = 500;
     private static final int MAX_STAGNANT_GENERATIONS = 3;
     private static final double PERFECT_FITNESS = 0.99;
     private static final double MUTATION_RATE = 0.4;
