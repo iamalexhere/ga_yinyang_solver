@@ -18,7 +18,7 @@ public class YinYangSolver {
     private final YinYangBoard initialBoard;
     private final YinYangPopulation population;
     private final YinYangFitnessFunction fitnessFunction;
-    private final Random RANDOM;
+    private final long seed;
 
     private int currentGeneration;
     private int stagnantGenerations;
@@ -26,10 +26,14 @@ public class YinYangSolver {
     private YinYangChromosome bestSolution;
 
     public YinYangSolver(char[][] board) {
+        this(board, System.currentTimeMillis()); // Default random seed
+    }
+
+    public YinYangSolver(char[][] board, long seed) {
         this.initialBoard = new YinYangBoard(board);
         this.fitnessFunction = new YinYangFitnessFunction();
-        this.population = new YinYangPopulation(fitnessFunction);
-        this.RANDOM = new Random();
+        this.population = new YinYangPopulation(fitnessFunction, seed);
+        this.seed = seed;
         this.currentGeneration = 0;
         this.stagnantGenerations = 0;
         this.bestFitness = Double.POSITIVE_INFINITY;
@@ -76,7 +80,6 @@ public class YinYangSolver {
     }
 
     private void updateStats() {
-        //double seed = RANDOM.nextDouble();
         YinYangChromosome currentBest = population.getBest();
         double currentFitness = fitnessFunction.calculate(currentBest);
 
@@ -87,5 +90,10 @@ public class YinYangSolver {
         } else {
             stagnantGenerations++;
         }   
+    }
+
+    // Getter for seed to verify the used seed
+    public long getSeed() {
+        return seed;
     }
 }

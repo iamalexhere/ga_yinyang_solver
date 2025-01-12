@@ -14,11 +14,16 @@ public class App {
             {'W', '0', '0', '0', '0', '0'}
         };
 
-        YinYangSolver solver = new YinYangSolver(initialBoard);
-        YinYangBoard solution = solver.solve();
-
-        System.out.println("\nInitial Board:");
+        // Gunakan seed spesifik untuk hasil yang konsisten
+        long seed = 12345L;
+        YinYangSolver solver = new YinYangSolver(initialBoard, seed);
+        
+        System.out.println("Initial Board:");
         System.out.println(new YinYangBoard(initialBoard).toString());
+        
+        System.out.println("\nSolving with seed: " + solver.getSeed());
+        YinYangBoard solution = solver.solve();
+        
         System.out.println("\nFinal Solution:");
         System.out.println(solution.toString());
     }

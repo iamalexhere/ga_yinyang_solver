@@ -6,19 +6,23 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class YinYangPopulation extends Population<YinYangChromosome> {
-    private static final Random RANDOM = new Random();
+    private final Random random;
     private static final int TOURNAMENT_SIZE = 5;
     private final YinYangFitnessFunction fitnessFunction;
 
     public YinYangPopulation(YinYangFitnessFunction fitnessFunction) {
+        this(fitnessFunction, System.currentTimeMillis());
+    }
+
+    public YinYangPopulation(YinYangFitnessFunction fitnessFunction, long seed) {
         this.fitnessFunction = fitnessFunction;
+        this.random = new Random(seed);
     }
 
     public void initialize(YinYangBoard initialBoard, int populationSize) {
-        // Instead of clearing, we'll create a new list and set it
         List<YinYangChromosome> newPopulation = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
-            YinYangChromosome chromosome = new YinYangChromosome(initialBoard);
+            YinYangChromosome chromosome = new YinYangChromosome(initialBoard, random.nextLong());
             chromosome.initializeRandom();
             newPopulation.add(chromosome);
         }
@@ -49,13 +53,13 @@ public class YinYangPopulation extends Population<YinYangChromosome> {
             YinYangChromosome parent1 = tournamentSelection();
             YinYangChromosome parent2 = tournamentSelection();
             
-            if (RANDOM.nextDouble() < crossoverRate) {
+            if (random.nextDouble() < crossoverRate) {
                 List<YinYangChromosome> offspring = parent1.crossover(parent2);
                 
-                if (RANDOM.nextDouble() < mutationRate) {
+                if (random.nextDouble() < mutationRate) {
                     offspring.get(0).mutate();
                 }
-                if (RANDOM.nextDouble() < mutationRate) {
+                if (random.nextDouble() < mutationRate) {
                     offspring.get(1).mutate();
                 }
                 
@@ -75,7 +79,6 @@ public class YinYangPopulation extends Population<YinYangChromosome> {
         initialize(initialBoard, getChromosomes().size());
     }
 
-    // Get the best chromosome in the population
     public YinYangChromosome getBest() {
         return getChromosomes().stream()
             .min((c1, c2) -> Double.compare(
@@ -85,11 +88,10 @@ public class YinYangPopulation extends Population<YinYangChromosome> {
     }
 
     public YinYangChromosome getRandom() {
-        int index = RANDOM.nextInt(getChromosomes().size());
+        int index = random.nextInt(getChromosomes().size());
         return getChromosomes().get(index);
     }
 
-    // Get top N chromosomes sorted by fitness
     public List<YinYangChromosome> getTopChromosomes(int count) {
         return getChromosomes().stream()
             .sorted((c1, c2) -> Double.compare(
@@ -100,7 +102,6 @@ public class YinYangPopulation extends Population<YinYangChromosome> {
             .collect(Collectors.toList());
     }
 
-    // Replace worst chromosomes with elite ones
     public void replaceWorstWithElite(List<YinYangChromosome> elite) {
         List<YinYangChromosome> currentChromosomes = new ArrayList<>(getChromosomes());
         currentChromosomes.sort((c1, c2) -> Double.compare(
