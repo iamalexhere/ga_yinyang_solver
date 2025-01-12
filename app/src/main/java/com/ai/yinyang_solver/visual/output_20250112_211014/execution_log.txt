@@ -1,0 +1,1143 @@
+=== YinYang Solver Execution Log ===
+Run ID: 20250112_211014
+Start Time: 2025-01-12T21:10:14.366268
+=====================================
+
+
+Testing different population sizes...
+
+Testing population size: 1000
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 0
+Current best fitness: 33.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 1
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 2
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 3
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 4
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 5
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 6
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 7
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 8
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 9
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 10
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 11
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 12
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 13
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 14
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 15
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 16
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 17
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 18
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 19
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 20
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 21
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWWBWB
+BBBBBB
+
+Population Size: 1000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 22
+Current best fitness: 0.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBWWB
+
+
+=== Solve Completed ===
+Total Generations: 23
+Final Best Fitness: 0.0
+Execution Time: 1.24 seconds
+====================
+
+
+Testing population size: 2000
+Population Size: 2000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 0
+Current best fitness: 63.0
+WWBBBB
+BWBBWB
+BWBBWB
+BWWWWB
+BWWBWB
+WWBBBB
+
+Population Size: 2000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 1
+Current best fitness: 45.0
+BBBBWW
+BWBWWW
+BWBBWW
+BWWWWB
+BWWBWB
+BBBBBB
+
+Population Size: 2000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 2
+Current best fitness: 30.0
+WWWBBB
+WBBBWB
+WWBBWB
+BWWWWB
+BWWBWB
+BBBBBB
+
+Population Size: 2000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 3
+Current best fitness: 0.0
+WWWBBB
+WBBBWB
+WWBWWB
+BWWWBB
+BWBWWB
+BBBBBB
+
+
+=== Solve Completed ===
+Total Generations: 4
+Final Best Fitness: 0.0
+Execution Time: 0.56 seconds
+====================
+
+
+Testing population size: 5000
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 0
+Current best fitness: 48.0
+BWWWWW
+BBBBWB
+BWWBWB
+BWWWWB
+BWWBWB
+BBBBWB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 1
+Current best fitness: 33.0
+WWWWBB
+BBBWWB
+BWBBWW
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 2
+Current best fitness: 15.0
+BBBBBB
+WWBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 3
+Current best fitness: 15.0
+BBBBBB
+WWBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 4
+Current best fitness: 15.0
+BBBBBB
+WWBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 5
+Current best fitness: 15.0
+BBBBBB
+WWBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 6
+Current best fitness: 15.0
+BBBBBB
+WWBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 7
+Current best fitness: 0.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBWWB
+
+
+=== Solve Completed ===
+Total Generations: 8
+Final Best Fitness: 0.0
+Execution Time: 3.33 seconds
+====================
+
+
+Testing population size: 10000
+Population Size: 10000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 0
+Current best fitness: 33.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWBBWW
+WBBBBB
+
+Population Size: 10000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 1
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBWW
+
+Population Size: 10000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 2
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBWW
+
+Population Size: 10000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 3
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBWW
+
+Population Size: 10000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 4
+Current best fitness: 0.0
+WWWWWW
+BBBBBW
+BWWBWW
+BBWWWB
+BWWBWB
+BBBBBB
+
+
+=== Solve Completed ===
+Total Generations: 5
+Final Best Fitness: 0.0
+Execution Time: 5.52 seconds
+====================
+
+
+Testing different mutation rates...
+
+Testing mutation rate: 0.1
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 0
+Current best fitness: 48.0
+BWWWWB
+WWBBBB
+BWBBWB
+BWWWWB
+BWWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 1
+Current best fitness: 33.0
+WWWWBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 2
+Current best fitness: 30.0
+BWWWWW
+BBBBBW
+BWBBWW
+BWWWWB
+BWBBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 3
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 4
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 5
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 6
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 7
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 8
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 9
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 10
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 11
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.1
+Crossover Rate: 0.3
+Current generation: 12
+Current best fitness: 0.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBWWB
+
+
+=== Solve Completed ===
+Total Generations: 13
+Final Best Fitness: 0.0
+Execution Time: 4.71 seconds
+====================
+
+
+Testing mutation rate: 0.2
+Population Size: 5000
+Mutation Rate: 0.2
+Crossover Rate: 0.3
+Current generation: 0
+Current best fitness: 48.0
+BWWBBB
+BBBBWB
+BWWBWB
+BWWWWW
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.2
+Crossover Rate: 0.3
+Current generation: 1
+Current best fitness: 30.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWBWWB
+WWBBBB
+
+Population Size: 5000
+Mutation Rate: 0.2
+Crossover Rate: 0.3
+Current generation: 2
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWW
+BWWBWB
+BWWWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.2
+Crossover Rate: 0.3
+Current generation: 3
+Current best fitness: 0.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBWWB
+
+
+=== Solve Completed ===
+Total Generations: 4
+Final Best Fitness: 0.0
+Execution Time: 1.72 seconds
+====================
+
+
+Testing mutation rate: 0.4
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 0
+Current best fitness: 48.0
+BWWWWB
+BBBBBB
+BWBBWB
+WWWWWB
+BBWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 1
+Current best fitness: 33.0
+WWBBBB
+BWBWWB
+BWBBWB
+BWWWWW
+BWBBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 2
+Current best fitness: 15.0
+BBBBWW
+BWBWWB
+BWBBWB
+BWWWWB
+BWWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 3
+Current best fitness: 0.0
+BWWBBB
+BWBBWB
+BWBWWB
+BWWWBB
+BWBWWB
+BBBBBB
+
+
+=== Solve Completed ===
+Total Generations: 4
+Final Best Fitness: 0.0
+Execution Time: 1.69 seconds
+====================
+
+
+Testing mutation rate: 0.6
+Population Size: 5000
+Mutation Rate: 0.6
+Crossover Rate: 0.3
+Current generation: 0
+Current best fitness: 45.0
+WWBBBB
+WBBWWB
+WWBBWB
+WWWWWB
+WWWBWB
+WBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.6
+Crossover Rate: 0.3
+Current generation: 1
+Current best fitness: 30.0
+BBBWWW
+BWBBBW
+BWWBWW
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.6
+Crossover Rate: 0.3
+Current generation: 2
+Current best fitness: 18.0
+WWBWWB
+WBBBBB
+WWWBWB
+BBWWWB
+BWWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.6
+Crossover Rate: 0.3
+Current generation: 3
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.6
+Crossover Rate: 0.3
+Current generation: 4
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.6
+Crossover Rate: 0.3
+Current generation: 5
+Current best fitness: 0.0
+WWWBBB
+WBBBWB
+WWWBWB
+BBWWWB
+BWWBWB
+BBBBBB
+
+
+=== Solve Completed ===
+Total Generations: 6
+Final Best Fitness: 0.0
+Execution Time: 2.34 seconds
+====================
+
+
+Testing different crossover rates...
+
+Testing crossover rate: 0.1
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.1
+Current generation: 0
+Current best fitness: 48.0
+BBBBBB
+BWBWWB
+BWBBWW
+BWWWWW
+BWBWWB
+BWBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.1
+Current generation: 1
+Current best fitness: 33.0
+BBBBBW
+BWBWWW
+BWBBWB
+BWWWWB
+BWBWWB
+BBBWBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.1
+Current generation: 2
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBBWB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.1
+Current generation: 3
+Current best fitness: 0.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBWWB
+
+
+=== Solve Completed ===
+Total Generations: 4
+Final Best Fitness: 0.0
+Execution Time: 1.68 seconds
+====================
+
+
+Testing crossover rate: 0.3
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 0
+Current best fitness: 56.0
+WBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 1
+Current best fitness: 30.0
+BBBWWB
+BWBBWB
+BWWBWB
+BWWWWB
+BWBBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 2
+Current best fitness: 15.0
+BWBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 3
+Current best fitness: 15.0
+BWBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.3
+Current generation: 4
+Current best fitness: 0.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBWWB
+
+
+=== Solve Completed ===
+Total Generations: 5
+Final Best Fitness: 0.0
+Execution Time: 2.06 seconds
+====================
+
+
+Testing crossover rate: 0.5
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.5
+Current generation: 0
+Current best fitness: 45.0
+WWBBBB
+WWBWWB
+WWBBWB
+BWWWWB
+BWWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.5
+Current generation: 1
+Current best fitness: 30.0
+WBBBBB
+WWBWWB
+WWBBWB
+BWWWWB
+BWWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.5
+Current generation: 2
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.5
+Current generation: 3
+Current best fitness: 15.0
+WWWWBB
+BBBWWB
+BWBBWB
+BWWWWB
+BWBWWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.5
+Current generation: 4
+Current best fitness: 0.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBWWB
+
+
+=== Solve Completed ===
+Total Generations: 5
+Final Best Fitness: 0.0
+Execution Time: 2.12 seconds
+====================
+
+
+Testing crossover rate: 0.7
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.7
+Current generation: 0
+Current best fitness: 18.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+WWBBWB
+BBBWWB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.7
+Current generation: 1
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWW
+BWWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.7
+Current generation: 2
+Current best fitness: 15.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWW
+BWWBWB
+BBBBBB
+
+Population Size: 5000
+Mutation Rate: 0.4
+Crossover Rate: 0.7
+Current generation: 3
+Current best fitness: 0.0
+BBBBBB
+BWBWWB
+BWBBWB
+BWWWWB
+BWBBWB
+BBBWWB
+
+
+=== Solve Completed ===
+Total Generations: 4
+Final Best Fitness: 0.0
+Execution Time: 1.83 seconds
+====================
+
+
+=== Total Execution Summary ===
+Total Runtime: 29.18 seconds
+============================
