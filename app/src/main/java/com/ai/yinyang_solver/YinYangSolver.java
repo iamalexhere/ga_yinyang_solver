@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 import java.awt.Color;
@@ -37,6 +39,20 @@ public class YinYangSolver {
     private static final Map<Integer, List<Double>> allFitnessHistories = new HashMap<>();
     private static final Color[] COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.MAGENTA};
 
+    private PrintWriter logWriter;
+
+    public void setLogWriter(PrintWriter writer) {
+        this.logWriter = writer;
+    }
+
+    private void log(String message) {
+        System.out.println(message);
+        if (logWriter != null) {
+            logWriter.println(message);
+            logWriter.flush();
+        }
+    }
+
     public YinYangSolver(char[][] board, int populationSize) {
         this(board, System.currentTimeMillis(), populationSize, 0.4, 0.3); // Default rates
     }
@@ -61,6 +77,7 @@ public class YinYangSolver {
     }
 
     public YinYangBoard solve() {
+        long startTime = System.currentTimeMillis();
         population.initialize(initialBoard, populationSize);
 
         while (!shouldTerminate()) {
@@ -84,14 +101,23 @@ public class YinYangSolver {
                 population.replaceWorstWithElite(elites);
             }
 
-            System.out.println("Population Size: " + populationSize);
-            System.out.println("Mutation Rate: " + mutationRate);
-            System.out.println("Crossover Rate: " + crossoverRate);
-            System.out.println("Current generation: " + currentGeneration);
-            System.out.println("Current best fitness: " + bestFitness);
-            System.out.println(bestSolution.toString());
+            log("Population Size: " + populationSize);
+            log("Mutation Rate: " + mutationRate);
+            log("Crossover Rate: " + crossoverRate);
+            log("Current generation: " + currentGeneration);
+            log("Current best fitness: " + bestFitness);
+            log(bestSolution.toString());
             currentGeneration++;
         }
+
+        long endTime = System.currentTimeMillis();
+        double executionTime = (endTime - startTime) / 1000.0;
+
+        log("\n=== Solve Completed ===");
+        log("Total Generations: " + currentGeneration);
+        log("Final Best Fitness: " + bestFitness);
+        log("Execution Time: " + String.format("%.2f", executionTime) + " seconds");
+        log("====================\n");
 
         // Store fitness history for this population size
         allFitnessHistories.put(populationSize, new ArrayList<>(fitnessHistory));
