@@ -10,17 +10,23 @@ import java.time.format.DateTimeFormatter;
 public class App {
     public static void main(String[] args) {
         long totalStartTime = System.currentTimeMillis();
+
         char[][] board = {
-            {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-            {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-            {'0', 'B', '0', 'W', 'W', 'W', '0', 'W', 'W', '0'},
-            {'0', 'B', '0', '0', '0', '0', 'W', '0', '0', '0'},
-            {'0', 'W', 'W', 'W', 'W', 'W', 'W', 'B', '0', '0'},
-            {'0', '0', '0', 'B', 'B', '0', 'B', '0', '0', '0'},
-            {'0', 'B', '0', '0', 'W', '0', '0', 'B', '0', '0'},
-            {'0', '0', 'W', '0', '0', '0', 'B', '0', '0', '0'},
-            {'0', '0', '0', '0', 'B', '0', '0', '0', 'B', '0'},
-            {'0', '0', '0', '0', '0', '0', '0', '0', 'B', 'W'},
+            {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
+            {'0', '0', 'W', '0', 'W', '0', '0', 'W', '0', '0', '0', 'W', '0', '0', '0'},
+            {'0', '0', 'W', '0', '0', '0', 'B', '0', '0', '0', 'W', '0', 'B', '0', '0'},
+            {'0', '0', 'W', '0', '0', '0', '0', '0', 'W', '0', '0', 'W', '0', '0', 'W'},
+            {'0', '0', '0', 'W', 'W', '0', '0', 'B', 'W', '0', '0', '0', '0', '0', '0'},
+            {'0', '0', '0', 'B', '0', 'W', '0', '0', 'W', '0', 'W', '0', '0', 'W', '0'},
+            {'0', 'B', '0', '0', 'B', '0', 'W', '0', '0', '0', '0', '0', 'W', '0', '0'},
+            {'0', '0', '0', 'B', 'B', 'B', 'B', '0', 'B', '0', '0', '0', '0', '0', '0'},
+            {'0', '0', 'B', 'W', '0', '0', '0', '0', '0', 'B', '0', '0', 'B', '0', '0'},
+            {'B', '0', 'B', '0', '0', 'B', '0', 'B', '0', '0', '0', '0', 'B', '0', '0'},
+            {'0', '0', 'W', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'B', '0'},
+            {'0', 'W', '0', '0', 'W', '0', 'W', '0', 'W', '0', '0', 'B', '0', '0', '0'},
+            {'0', '0', '0', '0', '0', 'W', '0', 'W', '0', '0', '0', '0', '0', 'B', '0'},
+            {'0', '0', 'B', '0', 'B', '0', '0', '0', 'W', 'W', '0', '0', '0', '0', '0'},
+            {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
         };
 
         // Create unique run ID with timestamp
@@ -51,7 +57,7 @@ public class App {
 
             // Test different population sizes
             logWriter.println("\nTesting different population sizes...");
-            int[] populationSizes = {1000, 2000, 5000, 10000};
+            int[] populationSizes = {5000};
             for (int popSize : populationSizes) {
                 logWriter.println("\nTesting population size: " + popSize);
                 YinYangSolver solver = new YinYangSolver(board, popSize);
@@ -64,39 +70,39 @@ public class App {
             }
 
             // Test different mutation rates
-            logWriter.println("\nTesting different mutation rates...");
-            double[] mutationRates = {0.1, 0.2, 0.4, 0.6};
-            for (double mutationRate : mutationRates) {
-                logWriter.println("\nTesting mutation rate: " + mutationRate);
-                YinYangSolver solver = new YinYangSolver(board, 5000, mutationRate, 0.3);
-                solver.setLogWriter(logWriter);
-                YinYangBoard solution = solver.solve();
+            // logWriter.println("\nTesting different mutation rates...");
+            // double[] mutationRates = {0.1, 0.2, 0.4, 0.6};
+            // for (double mutationRate : mutationRates) {
+            //     logWriter.println("\nTesting mutation rate: " + mutationRate);
+            //     YinYangSolver solver = new YinYangSolver(board, 5000, mutationRate, 0.3);
+            //     solver.setLogWriter(logWriter);
+            //     YinYangBoard solution = solver.solve();
                 
-                // Save solution board
-                BoardVisualizer.saveBoard(solution, boardsDir, 
-                    "solution_mut" + String.format("%.2f", mutationRate).replace(".", ""));
-                visualizer.addMutationRateHistory(mutationRate, solver.getFitnessHistory());
-            }
+            //     // Save solution board
+            //     BoardVisualizer.saveBoard(solution, boardsDir, 
+            //         "solution_mut" + String.format("%.2f", mutationRate).replace(".", ""));
+            //     visualizer.addMutationRateHistory(mutationRate, solver.getFitnessHistory());
+            // }
 
             // Test different crossover rates
-            logWriter.println("\nTesting different crossover rates...");
-            double[] crossoverRates = {0.1, 0.3, 0.5, 0.7};
-            for (double crossoverRate : crossoverRates) {
-                logWriter.println("\nTesting crossover rate: " + crossoverRate);
-                YinYangSolver solver = new YinYangSolver(board, 5000, 0.4, crossoverRate);
-                solver.setLogWriter(logWriter);
-                YinYangBoard solution = solver.solve();
+            // logWriter.println("\nTesting different crossover rates...");
+            // double[] crossoverRates = {0.1, 0.3, 0.5, 0.7};
+            // for (double crossoverRate : crossoverRates) {
+            //     logWriter.println("\nTesting crossover rate: " + crossoverRate);
+            //     YinYangSolver solver = new YinYangSolver(board, 5000, 0.4, crossoverRate);
+            //     solver.setLogWriter(logWriter);
+            //     YinYangBoard solution = solver.solve();
                 
-                // Save solution board
-                BoardVisualizer.saveBoard(solution, boardsDir, 
-                    "solution_cross" + String.format("%.2f", crossoverRate).replace(".", ""));
-                visualizer.addCrossoverRateHistory(crossoverRate, solver.getFitnessHistory());
-            }
+            //     // Save solution board
+            //     BoardVisualizer.saveBoard(solution, boardsDir, 
+            //         "solution_cross" + String.format("%.2f", crossoverRate).replace(".", ""));
+            //     visualizer.addCrossoverRateHistory(crossoverRate, solver.getFitnessHistory());
+            // }
 
-            // Generate all comparison plots
+            // // Generate all comparison plots
             visualizer.plotPopulationSizeComparison();
-            visualizer.plotMutationRateComparison();
-            visualizer.plotCrossoverRateComparison();
+            // visualizer.plotMutationRateComparison();
+            // visualizer.plotCrossoverRateComparison();
 
             long totalEndTime = System.currentTimeMillis();
             double totalExecutionTime = (totalEndTime - totalStartTime) / 1000.0;
@@ -105,10 +111,10 @@ public class App {
             logWriter.println("Total Runtime: " + String.format("%.2f", totalExecutionTime) + " seconds");
             logWriter.println("============================");
 
-            System.out.println("\nAll outputs have been saved in: " + outputBaseDir);
-            System.out.println("- Board visualizations: " + boardsDir);
-            System.out.println("- Performance plots: " + plotsDir);
-            System.out.println("- Execution log: " + logFile);
+            // System.out.println("\nAll outputs have been saved in: " + outputBaseDir);
+            // System.out.println("- Board visualizations: " + boardsDir);
+            // System.out.println("- Performance plots: " + plotsDir);
+            // System.out.println("- Execution log: " + logFile);
 
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());

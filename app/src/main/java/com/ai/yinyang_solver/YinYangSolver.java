@@ -19,7 +19,7 @@ public class YinYangSolver {
     private static final int MAX_GENERATIONS = 100;
     private static final int MAX_STAGNANT_GENERATIONS = 3;
     private static final double PERFECT_FITNESS = 0.99;
-    private static final double ELITISM_RATE = 0.1;
+    private static final double ELITISM_RATE = 0.2;
 
     private final YinYangBoard initialBoard;
     private final YinYangPopulation population;
@@ -54,7 +54,7 @@ public class YinYangSolver {
     }
 
     public YinYangSolver(char[][] board, int populationSize) {
-        this(board, System.currentTimeMillis(), populationSize, 0.4, 0.3); // Default rates
+        this(board, System.currentTimeMillis(), populationSize, 0.65, 0.99); // Default rates
     }
 
     public YinYangSolver(char[][] board, int populationSize, double mutationRate, double crossoverRate) {
