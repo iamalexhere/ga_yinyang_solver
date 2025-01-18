@@ -15,7 +15,15 @@ public class Population<C extends Chromosome<C>> implements Iterable<C> {
     //List of chromosomes
 	private List<C> chromosomes = new ArrayList<C>(DEFAULT_NUMBER_OF_CHROMOSOMES);
 
-	private final Random random = new Random();
+	private final Random random;
+
+    public Population(Random random) {
+        this.random = random;
+    }
+
+    public Population() {
+        this.random = new Random();
+    }
 
 	public void addChromosome(C chromosome) {
 		this.chromosomes.add(chromosome);

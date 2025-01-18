@@ -1,9 +1,9 @@
 package com.ai.yinyang_solver;
 
 import java.io.File;
-import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -52,9 +52,10 @@ public class App {
             // Test different population sizes
             logWriter.println("\nTesting different population sizes...");
             int[] populationSizes = {1000, 2000, 5000, 10000};
+            long fixedSeed = 42L; // Fixed seed for reproducible results
             for (int popSize : populationSizes) {
                 logWriter.println("\nTesting population size: " + popSize);
-                YinYangSolver solver = new YinYangSolver(board, popSize);
+                YinYangSolver solver = new YinYangSolver(board, popSize, fixedSeed);
                 solver.setLogWriter(logWriter);
                 YinYangBoard solution = solver.solve();
                 
@@ -68,7 +69,7 @@ public class App {
             double[] mutationRates = {0.1, 0.2, 0.4, 0.6};
             for (double mutationRate : mutationRates) {
                 logWriter.println("\nTesting mutation rate: " + mutationRate);
-                YinYangSolver solver = new YinYangSolver(board, 5000, mutationRate, 0.3);
+                YinYangSolver solver = new YinYangSolver(board, 5000, mutationRate, 0.3, fixedSeed);
                 solver.setLogWriter(logWriter);
                 YinYangBoard solution = solver.solve();
                 
@@ -83,7 +84,7 @@ public class App {
             double[] crossoverRates = {0.1, 0.3, 0.5, 0.7};
             for (double crossoverRate : crossoverRates) {
                 logWriter.println("\nTesting crossover rate: " + crossoverRate);
-                YinYangSolver solver = new YinYangSolver(board, 5000, 0.4, crossoverRate);
+                YinYangSolver solver = new YinYangSolver(board, 5000, 0.4, crossoverRate, fixedSeed);
                 solver.setLogWriter(logWriter);
                 YinYangBoard solution = solver.solve();
                 

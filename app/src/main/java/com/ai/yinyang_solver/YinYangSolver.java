@@ -29,6 +29,7 @@ public class YinYangSolver {
     private final int populationSize;
     private final double mutationRate;
     private final double crossoverRate;
+    private final Random random;
 
     private int currentGeneration;
     private int stagnantGenerations;
@@ -54,59 +55,72 @@ public class YinYangSolver {
     }
 
     public YinYangSolver(char[][] board, int populationSize) {
-        this(board, System.currentTimeMillis(), populationSize, 0.4, 0.3); // Default rates
+        this(board, populationSize, 0.4, 0.3);
     }
 
     public YinYangSolver(char[][] board, int populationSize, double mutationRate, double crossoverRate) {
-        this(board, System.currentTimeMillis(), populationSize, mutationRate, crossoverRate);
+        this(board, populationSize, mutationRate, crossoverRate, System.currentTimeMillis());
     }
 
-    public YinYangSolver(char[][] board, long seed, int populationSize, double mutationRate, double crossoverRate) {
+    public YinYangSolver(char[][] board, int populationSize, long seed) {
+        this(board, populationSize, 0.4, 0.3, seed);
+    }
+
+    public YinYangSolver(char[][] board, int populationSize, double mutationRate, double crossoverRate, long seed) {
         this.initialBoard = new YinYangBoard(board);
-        this.fitnessFunction = new YinYangFitnessFunction();
-        this.population = new YinYangPopulation(fitnessFunction, seed);
-        this.seed = seed;
-        this.currentGeneration = 0;
-        this.stagnantGenerations = 0;
-        this.bestFitness = Double.POSITIVE_INFINITY;
-        this.bestSolution = null;
-        this.fitnessHistory = new ArrayList<>();
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
+        this.seed = seed;
+        this.random = new Random(seed);
+        this.fitnessFunction = new YinYangFitnessFunction();
+        this.fitnessHistory = new ArrayList<>();
+        this.population = new YinYangPopulation(fitnessFunction, seed);
+        this.population.initialize(initialBoard, populationSize);
+        
+        this.currentGeneration = 0;
+        this.stagnantGenerations = 0;
+        this.bestFitness = Double.POSITIVE_INFINITY;  // Initialize to worst possible fitness
+        this.bestSolution = null;
     }
 
     public YinYangBoard solve() {
         long startTime = System.currentTimeMillis();
-        population.initialize(initialBoard, populationSize);
 
+        // Initial fitness evaluation
+        updateStats();
+        
         while (!shouldTerminate()) {
-            // 1. Simpan elite chromosomes sebelum evolusi
+            // 1. Save elite chromosomes before evolution
             int eliteCount = (int)(populationSize * ELITISM_RATE);
             List<YinYangChromosome> elites = population.getTopChromosomes(eliteCount);
             
-            // 2. Evolusi populasi
+            // 2. Evolve population
             population.evolve(mutationRate, crossoverRate);
             
-            // 3. Kembalikan elite chromosomes
+            // 3. Restore elite chromosomes
             population.replaceWorstWithElite(elites);
 
-            // Update stats dan cek stagnasi
+            // Update stats and check stagnation
             updateStats();
 
-            // Reinisialisasi jika stagnant, tapi pertahankan elite
-            if (stagnantGenerations > MAX_STAGNANT_GENERATIONS) {
+            // Reinitialize if stagnant, but preserve elite
+            if (stagnantGenerations >= MAX_STAGNANT_GENERATIONS) {
                 population.reinitialize(initialBoard);
                 stagnantGenerations = 0;
                 population.replaceWorstWithElite(elites);
+                updateStats();
             }
 
+            log("Generation: " + currentGeneration);
             log("Population Size: " + populationSize);
             log("Mutation Rate: " + mutationRate);
             log("Crossover Rate: " + crossoverRate);
-            log("Current generation: " + currentGeneration);
             log("Current best fitness: " + bestFitness);
-            log(bestSolution.toString());
+            if (bestSolution != null) {
+                log(bestSolution.toString());
+            }
+            
             currentGeneration++;
         }
 
@@ -122,7 +136,6 @@ public class YinYangSolver {
         // Store fitness history for this population size
         allFitnessHistories.put(populationSize, new ArrayList<>(fitnessHistory));
 
-        // Return the best solution
         return bestSolution != null ? bestSolution.getBoard() : population.getBest().getBoard();
     }
 
@@ -133,17 +146,18 @@ public class YinYangSolver {
 
     private void updateStats() {
         YinYangChromosome currentBest = population.getBest();
-        double currentFitness = fitnessFunction.calculate(currentBest);
+        if (currentBest != null) {
+            double currentFitness = fitnessFunction.calculate(currentBest);
+            fitnessHistory.add(currentFitness);  // Add current fitness to history
 
-        if (currentFitness < bestFitness) {
-            bestFitness = currentFitness;
-            bestSolution = currentBest.clone();
-            stagnantGenerations = 0;
-        } else {
-            stagnantGenerations++;
+            if (currentFitness < bestFitness) {
+                bestFitness = currentFitness;
+                bestSolution = currentBest.clone();
+                stagnantGenerations = 0;
+            } else {
+                stagnantGenerations++;
+            }
         }
-        
-        fitnessHistory.add(currentFitness);
     }
 
     public List<Double> getFitnessHistory() {
